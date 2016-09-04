@@ -1,0 +1,15 @@
+/*
+ * StatCraft Plugin
+ *
+ * Copyright (c) 2016 Kyle Wood (DemonWav)
+ * https://www.demonwav.com
+ *
+ * MIT License
+ */
+
+version = version
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "ninja.leaping.configurate:configurate-core:3.1.1"
+}

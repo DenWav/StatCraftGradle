@@ -1,0 +1,231 @@
+name: StatCraft
+main: com.demonwav.statcraft.BukkitStatCraft
+version: @version@
+author: DemonWav
+
+commands:
+  statcraft:
+    description: User commands for listing stats and admin functions
+    aliases: sc
+
+permissions:
+  statcraft.*:
+    description: All user and admin commands and server announcements
+    default: op
+    children:
+      statcraft.user.*: true
+      statcraft.admin.*: true
+      statcraft.broadcast.*: true
+  #---------------------------------------------#
+  statcraft.user.*:
+    description: All user commands
+    default: op
+    children:
+      statcraft.user.deaths: true
+      statcraft.user.blocksbroken: true
+      statcraft.user.blocksplaced: true
+      statcraft.user.mined: true
+      statcraft.user.playtime: true
+      statcraft.user.lastseen: true
+      statcraft.user.joins: true
+      statcraft.user.firstjoin: true
+      statcraft.user.itemscrafted: true
+      statcraft.user.itemsbrewed: true
+      statcraft.user.itemscooked: true
+      statcraft.user.onfire: true
+      statcraft.user.worldchanges: true
+      statcraft.user.toolsbroken: true
+      statcraft.user.arrowsshot: true
+      statcraft.user.bucketsfilled: true
+      statcraft.user.bucketsemptied: true
+      statcraft.user.itemsdropped: true
+      statcraft.user.itemspickedup: true
+      statcraft.user.bed: true
+      statcraft.user.lastslept: true
+      statcraft.user.messagesspoken: true
+      statcraft.user.wordsspoken: true
+      statcraft.user.tabcompletes: true
+      statcraft.user.damagetaken: true
+      statcraft.user.fishcaught: true
+      statcraft.user.xpgained: true
+      statcraft.user.xpspent: true
+      statcraft.user.highestlevel: true
+      statcraft.user.move: true
+      statcraft.user.movetype: true
+      statcraft.user.kicks: true
+      statcraft.user.kills: true
+      statcraft.user.jumps: true
+      statcraft.user.fallen: true
+      statcraft.user.eggsthrown: true
+      statcraft.user.chickenshatched: true
+      statcraft.user.enderpearls: true
+      statcraft.user.animalsbred: true
+      statcraft.user.tntdetonated: true
+      statcraft.user.enchantsdone: true
+      statcraft.user.repairsdone: true
+      statcraft.user.damagedealt: true
+      statcraft.user.firesstarted: true
+      statcraft.user.snowball: true
+      statcraft.user.resetstats: true
+  statcraft.user.deaths:
+    description: Allows user to view number of deaths
+    default: not-op
+  statcraft.user.blocksbroken:
+    description: Allows user to view number blocks broken
+    default: not-op
+  statcraft.user.blocksplaced:
+    description: Allows user to view number of blocks placed
+    default: not-op
+  statcraft.user.mined:
+    description: Allow user to view number of individual blocks broken
+    default: not-op
+  statcraft.user.playtime:
+    description: Allows user to view playtime
+    default: not-op
+  statcraft.user.lastseen:
+    description: Allows user to view the last time a player was seen
+    default: not-op
+  statcraft.user.joins:
+    description: Allows user to view number of times a player has joined
+    default: not-op
+  statcraft.user.firstjoin:
+    description: Allows user to view when a player first joined the server
+    default: not-op
+  statcraft.user.itemscrafted:
+    description: Allows user to view number of items crafted
+    default: not-op
+  statcraft.user.itemsbrewed:
+    description: Allows user to view number of items brewed
+    default: not-op
+  statcraft.user.itemscooked:
+    description: Allow user to view number of items cooked
+    default: not-op
+  statcraft.user.onfire:
+    description: Allows user to view how long a player has been on fire
+    default: not-op
+  statcraft.user.worldchanges:
+    description: Allows user to view number of world changes
+    default: not-op
+  statcraft.user.toolsbroken:
+    description: Allows user to view number of tools broken
+    default: not-op
+  statcraft.user.arrowsshot:
+    description: Allows user to view number of arrows shot
+    default: not-op
+  statcraft.user.bucketsfilled:
+    description: Allows user to view number of buckets filled
+    default: not-op
+  statcraft.user.bucketsemptied:
+    description: Allows user to view number of buckets emptied
+    default: not-op
+  statcraft.user.itemsdropped:
+    description: Allows user to view number of items dropped
+    default: not-op
+  statcraft.user.itemspickedup:
+    description: Allows user to view number of items picked up
+    default: not-op
+  statcraft.user.bed:
+    description: Allows user to view how long a player has slept
+    default: not-op
+  statcraft.user.lastslept:
+    description: Allows user to view the last time a player slept
+    default: not-op
+  statcraft.user.messagesspoken:
+    description: Allows user to view number of messages spoken
+    default: not-op
+  statcraft.user.wordsspoken:
+    description: Allows user to view number of words spoken
+    default: not-op
+  statcraft.user.tabcompletes:
+    description: Allows user to view number of attempted tab-completes
+    default: not-op
+  statcraft.user.damagetaken:
+    description: Allows user to view amount of damage a player has taken
+    default: not-op
+  statcraft.user.fishcaught:
+    description: Allows user to view number of fish caught
+    default: not-op
+  statcraft.user.xpgained:
+    description: Allows user to view amount of xp gained
+    default: not-op
+  statcraft.user.xpspent:
+    description: Allows user to view amount of xp spent
+    default: not-op
+  statcraft.user.highestlevel:
+    description: Allows user to view a player's highest level
+    default: not-op
+  statcraft.user.move:
+    description: Allows user to view how far a player has moved
+    default: not-op
+  statcraft.user.kicks:
+    dscription: Allows user to view how many times a player has been kicked
+    default: not-op
+  statcraft.user.kills:
+    description: Allows user to view number of kills
+    default: not-op
+  statcraft.user.jumps:
+    description: Allows user to view number of jumps
+    default: not-op
+  statcraft.user.eggsthrown:
+    description: Allows user to view number of eggs thrown
+    default: not-op
+  statcraft.user.chickenshatched:
+    description: Allows user to view number of chickens hatched
+    default: not-op
+  statcraft.user.enderpearls:
+    description: Allows user to view number of ender pearls thrown
+    default: not-op
+  statcraft.user.animalsbred:
+    description: Allows user to view number of animals bred
+    default: not-op
+  statcraft.user.tntdetonated:
+    description: Allows user to view number of tnt detonated
+    default: not-op
+  statcraft.user.enchantsdone:
+    description: Allows user to view number of enchants done
+    default: not-op
+  statcraft.user.repairsdone:
+    description: Allows user to view number of repairs done
+    default: not-op
+  statcraft.user.damagedealt:
+    description: Allows user to view amount of damage dealt
+    default: not-op
+  statcraft.user.firesstarted:
+    description: Allows user to view number of fires started
+    default: not-op
+  statcraft.user.snowball:
+    description: Allows user to view stats on snowballs
+    default: not-op
+  statcraft.user.resetstats:
+    description: Allows user to reset their own stats
+    default: not-op
+  #---------------------------------------------#
+  statcraft.admin.*:
+    description: All admin commands
+    default: op
+    children:
+      statcraft.admin.resetotherstats: true
+  statcraft.admin.resetotherstats:
+    description: Allows admin to reset another player's stats
+    default: op
+  #---------------------------------------------#
+  statcraft.broadcast.*:
+    description: Receives the server announcements of damage
+    default: op
+    children:
+      statcraft.broadcast.onfire: true
+      statcraft.broadcast.droawning: true
+      statcraft.broadcast.poison: true
+      statcraft.broadcast.witheraway: true
+  statcraft.broadcast.onfire:
+    description: Receives announcements when a player is on fire
+    default: not-op
+  statcraft.broadcast.droawning:
+    description: Receives announcements when a player is drowning
+    default: not-op
+  statcraft.broadcast.poison:
+    description: Receives announcements when a player is poisoned
+    default: not-op
+  statcraft.broadcast.witheraway:
+    description: Receives announcements when a player is withering away
+    default: not-op

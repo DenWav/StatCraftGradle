@@ -1,0 +1,26 @@
+/*
+ * StatCraft Plugin
+ *
+ * Copyright (c) 2016 Kyle Wood (DemonWav)
+ * https://www.demonwav.com
+ *
+ * MIT License
+ */
+
+repositories {
+    maven {
+        name = "spigotmc-repo"
+        url = "https://hub.spigotmc.org/nexus/content/groups/public/"
+    }
+}
+
+dependencies {
+    compile project(":statcraft-common")
+    compileOnly "org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT"
+}
+
+processResources {
+    from("src/main/resources") {
+        expand "version": project.version
+    }
+}

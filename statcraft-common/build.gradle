@@ -1,0 +1,14 @@
+/*
+ * StatCraft Plugin
+ *
+ * Copyright (c) 2016 Kyle Wood (DemonWav)
+ * https://www.demonwav.com
+ *
+ * MIT License
+ */
+
+dependencies {
+    compile project(":statcraft-api")
+    compile "com.zaxxer:HikariCP:2.4.5"
+    compile "org.mariadb.jdbc:mariadb-java-client:1.3.7"
+}

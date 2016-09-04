@@ -1,0 +1,27 @@
+/*
+ * StatCraft Plugin
+ *
+ * Copyright (c) 2016 Kyle Wood (DemonWav)
+ * https://www.demonwav.com
+ *
+ * MIT License
+ */
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "spongepowered-repo"
+        url = "http://repo.spongepowered.org/maven/"
+    }
+}
+
+dependencies {
+    compile project(":statcraft-common")
+    compileOnly "org.spongepowered:spongeapi:5.0.0-SNAPSHOT"
+}
+
+processResources {
+    from("src/main/resources") {
+        expand "version": project.version
+    }
+}

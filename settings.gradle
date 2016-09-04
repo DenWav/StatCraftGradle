@@ -1,0 +1,12 @@
+/*
+ * StatCraft Plugin
+ *
+ * Copyright (c) 2016 Kyle Wood (DemonWav)
+ * https://www.demonwav.com
+ *
+ * MIT License
+ */
+
+rootProject.name = "statcraft"
+
+include "statcraft-api", "statcraft-common", "statcraft-bukkit", "statcraft-sponge"
