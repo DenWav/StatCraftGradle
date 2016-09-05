@@ -104,9 +104,15 @@ interface StatCraft {
      */
     fun error(s: String)
 
+    /**
+     * TODO
+     */
     fun getApi(plugin: Any): StatCraftApi
 
     companion object {
+        /**
+         * TODO
+         */
         lateinit var instance: StatCraft
     }
 }
