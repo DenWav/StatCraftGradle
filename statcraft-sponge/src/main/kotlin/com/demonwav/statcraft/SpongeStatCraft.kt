@@ -14,6 +14,9 @@ import com.demonwav.statcraft.commands.BaseCommand
 import com.demonwav.statcraft.config.Config
 import com.demonwav.statcraft.sql.DatabaseManager
 import com.demonwav.statcraft.sql.ThreadManager
+import com.google.inject.Inject
+import org.slf4j.Logger
+import org.spongepowered.api.Sponge
 import org.spongepowered.api.plugin.Plugin
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -25,6 +28,21 @@ import java.util.concurrent.ConcurrentHashMap
 )
 @StatCraftNamespace("4f89d232-eb02-47b8-abe0-fb42b617505b")
 class SpongeStatCraft : StatCraft {
+    override fun getPlayerName(uuid: UUID): String? {
+        return Sponge.getServer().getPlayer(uuid).get()?.name
+    }
+
+    override fun getWorldName(uuid: UUID): String? {
+        return Sponge.getServer().getWorld(uuid).get()?.name
+    }
+
+    override fun isEnabled(): Boolean {
+        TODO()
+    }
+
+    @Inject
+    private lateinit var logger: Logger
+
     override val databaseManager: DatabaseManager
         get() = throw UnsupportedOperationException()
     override val lastFireTime: ConcurrentHashMap<UUID, Int>
@@ -49,4 +67,21 @@ class SpongeStatCraft : StatCraft {
         get() = throw UnsupportedOperationException()
     override val statConfig: Config
         get() = throw UnsupportedOperationException()
+
+
+    override fun disablePlugin() {
+        // TODO
+    }
+
+    override fun info(s: String) {
+        logger.info(s)
+    }
+
+    override fun warn(s: String) {
+        logger.warn(s)
+    }
+
+    override fun error(s: String) {
+        logger.error(s)
+    }
 }

@@ -71,4 +71,35 @@ interface StatCraft {
      * TODO
      */
     val statConfig: Config
+
+    /**
+     * TODO
+     */
+    fun getPlayerName(uuid: UUID): String?
+    /**
+     * TODO
+     */
+    fun getWorldName(uuid: UUID): String?
+
+    /**
+     * TODO
+     */
+    fun disablePlugin()
+    /**
+     * TODO
+     */
+    fun isEnabled(): Boolean
+
+    /**
+     * TODO
+     */
+    fun info(s: String)
+    /**
+     * TODO
+     */
+    fun warn(s: String)
+    /**
+     * TODO
+     */
+    fun error(s: String)
 }

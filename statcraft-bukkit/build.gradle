@@ -24,3 +24,14 @@ processResources {
         expand "version": project.version
     }
 }
+
+shadowJar {
+    dependencies {
+        // Bukkit includes snakeyaml, but we bundle configurate with our Bukkit jars, which also includes it
+        // So we manually exclude it
+        exclude(dependency("org.yaml::"))
+
+        // Bukkit also includes guava, which is bundled with configurate-core, so again we exclude it
+        exclude(dependency("com.google.guava::"))
+    }
+}

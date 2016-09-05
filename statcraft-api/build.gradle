@@ -7,9 +7,12 @@
  * MIT License
  */
 
-version = version
+apply plugin: "maven"
+
+version = statcraftApiVersion
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "ninja.leaping.configurate:configurate-core:3.1.1"
+    compile "ninja.leaping.configurate:configurate-core:$configurate_version"
+    compile 'com.intellij:annotations:12.0'
 }

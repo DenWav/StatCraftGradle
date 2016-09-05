@@ -20,8 +20,19 @@ dependencies {
     compileOnly "org.spongepowered:spongeapi:5.0.0-SNAPSHOT"
 }
 
-processResources {
-    from("src/main/resources") {
-        expand "version": project.version
+shadowJar {
+    dependencies {
+        // Exclude all ninja.leaping.configurate dependencies (sponge provides these)
+        exclude(dependency("ninja.leaping.configurate::"))
+        // Exclude all configurate transitive dependencies. shadowJar can't do this automatically because it's stupid
+        exclude(dependency("com.google.guava::"))
+        // hocon
+        exclude(dependency("com.typesafe::"))
+        // yaml
+        exclude(dependency("org.yaml::"))
+
+
+        // Sponge provides org.slf4j, which is included as well in HikariCP, so exclude it from the jar
+        exclude(dependency("org.slf4j::"))
     }
 }
