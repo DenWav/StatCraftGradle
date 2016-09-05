@@ -17,7 +17,7 @@ import java.util.UUID
 /**
  * TODO
  */
-abstract class StatCraftApi<out T : Any>(val plugin: T, val statcraft: StatCraft) {
+class StatCraftApi(val plugin: Any) {
 
     private var namespaceString: String? = null
     /**

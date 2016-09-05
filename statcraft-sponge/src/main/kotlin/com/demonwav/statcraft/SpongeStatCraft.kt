@@ -9,6 +9,7 @@
 
 package com.demonwav.statcraft
 
+import com.demonwav.statcraft.api.StatCraftApi
 import com.demonwav.statcraft.api.StatCraftNamespace
 import com.demonwav.statcraft.commands.BaseCommand
 import com.demonwav.statcraft.config.Config
@@ -17,6 +18,8 @@ import com.demonwav.statcraft.sql.ThreadManager
 import com.google.inject.Inject
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
+import org.spongepowered.api.event.Listener
+import org.spongepowered.api.event.game.state.GameStartedServerEvent
 import org.spongepowered.api.plugin.Plugin
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -28,8 +31,17 @@ import java.util.concurrent.ConcurrentHashMap
 )
 @StatCraftNamespace("4f89d232-eb02-47b8-abe0-fb42b617505b")
 class SpongeStatCraft : StatCraft {
+    override fun getStatConfig(): Config {
+        TODO()
+    }
+
+    override fun getApi(plugin: Any): StatCraftApi {
+        TODO()
+    }
+
     init {
         StatCraft.instance = this
+        SpongeStatCraft.instance = this
     }
 
     override fun getPlayerName(uuid: UUID): String? {
@@ -69,9 +81,6 @@ class SpongeStatCraft : StatCraft {
         get() = throw UnsupportedOperationException()
     override val moveUpdater: ServerStatUpdater.Move<*, *>
         get() = throw UnsupportedOperationException()
-    override val statConfig: Config
-        get() = throw UnsupportedOperationException()
-
 
     override fun disablePlugin() {
         // TODO
@@ -87,5 +96,14 @@ class SpongeStatCraft : StatCraft {
 
     override fun error(s: String) {
         logger.error(s)
+    }
+
+    @Listener
+    fun onServerStart(event: GameStartedServerEvent) {
+        error("STATCRAFT")
+    }
+
+    companion object {
+        lateinit var instance: SpongeStatCraft
     }
 }

@@ -38,32 +38,32 @@ interface DatabaseManager : AutoCloseable {
     /**
      * TODO
      */
-    fun execute(@Language("MySQL") query: String, vararg params: Any)
+    fun execute(@Language("MySQL") query: String, vararg params: Any?)
 
     /**
      * TODO
      */
-    fun getFirstRow(@Language("MySQL") query: String, vararg params: Any): DbRow?
+    fun getFirstRow(@Language("MySQL") query: String, vararg params: Any?): DbRow?
 
     /**
      * TODO
      */
-    fun <T> getFirstColumn(@Language("MySQL") query: String, vararg params: Any): T?
+    fun <T> getFirstColumn(@Language("MySQL") query: String, vararg params: Any?): T?
 
     /**
      * TODO
      */
-    fun <T> getFirstColumnResults(@Language("MySQL") query: String, vararg params: Any): List<T>?
+    fun <T> getFirstColumnResults(@Language("MySQL") query: String, vararg params: Any?): List<T>?
 
     /**
      * TODO
      */
-    fun getResults(@Language("MySQL") query: String, vararg params: Any): List<DbRow>?
+    fun getResults(@Language("MySQL") query: String, vararg params: Any?): List<DbRow>?
 
     /**
      * TODO
      */
-    fun executeUpdate(@Language("MySQL") query: String, vararg params: Any): Int
+    fun executeUpdate(@Language("MySQL") query: String, vararg params: Any?): Int
 
     /**
      * TODO

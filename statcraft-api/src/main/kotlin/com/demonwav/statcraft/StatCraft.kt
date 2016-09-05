@@ -9,6 +9,7 @@
 
 package com.demonwav.statcraft
 
+import com.demonwav.statcraft.api.StatCraftApi
 import com.demonwav.statcraft.commands.BaseCommand
 import com.demonwav.statcraft.config.Config
 import com.demonwav.statcraft.sql.DatabaseManager
@@ -70,7 +71,7 @@ interface StatCraft {
     /**
      * TODO
      */
-    val statConfig: Config
+    fun getStatConfig(): Config
 
     /**
      * TODO
@@ -102,6 +103,8 @@ interface StatCraft {
      * TODO
      */
     fun error(s: String)
+
+    fun getApi(plugin: Any): StatCraftApi
 
     companion object {
         lateinit var instance: StatCraft

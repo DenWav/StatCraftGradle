@@ -33,28 +33,30 @@ abstract class AbstractDatabaseManager : DatabaseManager {
     private val worldMap = ConcurrentHashMap<UUID, Int>()
     private val pluginMap = ConcurrentHashMap<UUID, Int>()
 
-    init {
+    fun initialize() {
         try {
             val config = HikariConfig()
             config.poolName = "StatCraftDb"
 
             config.dataSourceClassName = MariaDbDataSource::class.java.name
-            config.username = StatCraft.instance.statConfig.mysql.username
-            config.password = StatCraft.instance.statConfig.mysql.password
-            config.addDataSourceProperty("databaseName", StatCraft.instance.statConfig.mysql.database)
-            config.addDataSourceProperty("portNumber", StatCraft.instance.statConfig.mysql.port)
-            config.addDataSourceProperty("serverName", StatCraft.instance.statConfig.mysql.hostname)
+            config.username = StatCraft.instance.getStatConfig().mysql.username
+            config.password = StatCraft.instance.getStatConfig().mysql.password
+            config.addDataSourceProperty("databaseName", StatCraft.instance.getStatConfig().mysql.database)
+            config.addDataSourceProperty("portNumber", StatCraft.instance.getStatConfig().mysql.port)
+            config.addDataSourceProperty("serverName", StatCraft.instance.getStatConfig().mysql.hostname)
 
-            config.addDataSourceProperty("cachePrepStmts", true)
-            config.addDataSourceProperty("prepStmtCacheSize", 250)
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048)
-            config.addDataSourceProperty("useServerPrepStmts", true)
-            config.addDataSourceProperty("cacheCallableStmts", true)
-            config.addDataSourceProperty("cacheResultSetMetadata", true)
-            config.addDataSourceProperty("cacheServerConfiguration", true)
-            config.addDataSourceProperty("useLocalSessionState", true)
-            config.addDataSourceProperty("elideSetAutoCommits", true)
-            config.addDataSourceProperty("alwaysSendSetIsolation", false)
+            config.addDataSourceProperty("properties",
+                "cachePrepStmts=true&" +
+                "prepStmtCacheSize=250&" +
+                "prepStmtCacheSqlLimit=2048&" +
+                "useServerPrepStmts=true&" +
+                "cacheCallableStmts=true&" +
+                "cacheResultSetMetadata=true&" +
+                "cacheServerConfiguration=true&" +
+                "useLocalSessionState=true&" +
+                "elideSetAutoCommits=true&" +
+                "alwaysSendSetIsolation=true"
+            )
 
             config.connectionTestQuery = "SELECT 1"
             config.isInitializationFailFast = true
@@ -163,7 +165,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
     }
 
     private fun remakeTable(table: Table, ask: Boolean) {
-        if (!ask || StatCraft.instance.statConfig.mysql.forceSetup) {
+        if (!ask || StatCraft.instance.getStatConfig().mysql.forceSetup) {
             dropTable(table)
             createTable(table)
             StatCraft.instance.info("Created table `${table.getName()}`")
@@ -200,39 +202,39 @@ abstract class AbstractDatabaseManager : DatabaseManager {
         return DbStatement(connection).query(query)
     }
 
-    override fun execute(query: String, vararg params: Any) {
+    override fun execute(@Language("MySQL") query: String, vararg params: Any?) {
         var statement: DbStatement? = null
         try {
-            statement = query(query).execute(params)
+            statement = query(query).execute(*params)
         } finally {
             statement?.close()
         }
     }
 
-    override fun getFirstRow(@Language("MySQL") query: String, vararg params: Any): DbRow? {
+    override fun getFirstRow(@Language("MySQL") query: String, vararg params: Any?): DbRow? {
         var statement: DbStatement? = null
         try {
-            statement = query(query).execute(params)
+            statement = query(query).execute(*params)
             return statement.nextRow
         } finally {
             statement?.close()
         }
     }
 
-    override fun <T> getFirstColumn(@Language("MySQL") query: String, vararg params: Any): T? {
+    override fun <T> getFirstColumn(@Language("MySQL") query: String, vararg params: Any?): T? {
         var statement: DbStatement? = null
         try {
-            statement = query(query).execute(params)
+            statement = query(query).execute(*params)
             return statement.getFirstColumn()
         } finally {
             statement?.close()
         }
     }
 
-    override fun <T> getFirstColumnResults(@Language("MySQL") query: String, vararg params: Any): List<T>? {
+    override fun <T> getFirstColumnResults(@Language("MySQL") query: String, vararg params: Any?): List<T>? {
         val dbRows = ArrayList<T>()
         var result: T?
-        query(query).execute(params).use {
+        query(query).execute(*params).use {
             result = it.getFirstColumn()
             while (result != null) {
                 dbRows.add(result as T)
@@ -242,21 +244,21 @@ abstract class AbstractDatabaseManager : DatabaseManager {
         return dbRows
     }
 
-    override fun getResults(@Language("MySQL") query: String, vararg params: Any): List<DbRow>? {
+    override fun getResults(@Language("MySQL") query: String, vararg params: Any?): List<DbRow>? {
         var statement: DbStatement? = null
         try {
-            statement = query(query).execute(params)
+            statement = query(query).execute(*params)
             return statement.results
         } finally {
             statement?.close()
         }
     }
 
-    override fun executeUpdate(@Language("MySQL") query: String, vararg params: Any): Int {
+    override fun executeUpdate(@Language("MySQL") query: String, vararg params: Any?): Int {
         var statement: DbStatement? = null
         try {
             statement = query(query)
-            return statement.executeUpdate(params)
+            return statement.executeUpdate(*params)
         } finally {
             statement?.close()
         }
@@ -273,7 +275,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
             // byte array representation of the UUID
             val array = uuid.toByte()
             try {
-                result = getFirstColumn("SELECT p.id FROM players p WHERE p.uuid = ?", array)
+                result = getFirstColumn("SELECT p.id FROM players p WHERE BINARY p.uuid = BINARY ?", array)
 
                 if (result == null) {
                     // This uuid isn't in the database yet, so add it
@@ -283,7 +285,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
                     if (name != null) {
                         executeUpdate("INSERT INTO players (uuid, name) VALUES (?, ?)", array, name)
 
-                        result = getFirstColumn("SELECT p.id FROM players p WHERE p.uuid = ?", array)
+                        result = getFirstColumn("SELECT p.id FROM players p WHERE BINARY p.uuid = BINARY ?", array)
                     }
                 }
             } catch (e: SQLException) {
@@ -322,7 +324,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
             // byte array representation of the UUID
             val array = uuid.toByte()
             try {
-                result = getFirstColumn("SELECT w.id FROM worlds w WHERE w.uuid = ?", array)
+                result = getFirstColumn("SELECT w.id FROM worlds w WHERE BINARY w.uuid = BINARY ?", array)
 
                 if (result == null) {
                     // This uuid isn't in the database yet, so add it
@@ -332,7 +334,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
                     if (name != null) {
                         executeUpdate("INSERT INTO worlds (uuid, name, custom_name) VALUES (?, ?, ?)", array, name, name)
 
-                        result = getFirstColumn("SELECT w.id FROM worlds w WHERE w.uuid = ?", array)
+                        result = getFirstColumn("SELECT w.id FROM worlds w WHERE BINARY w.uuid = BINARY ?", array)
                     }
                 }
             } catch (e: SQLException) {
@@ -362,17 +364,17 @@ abstract class AbstractDatabaseManager : DatabaseManager {
             }
 
             // We don't have the UUID cached, so check the database
-            var result: Int? = null
+            var result: Int?
             // byte array representation of hte UUID
             val array = uuid.toByte()
 
-            result = getFirstColumn("SELECT n.id FROM namespace n WHERE n.uuid = ?", array)
+            result = getFirstColumn("SELECT n.id FROM namespace n WHERE BINARY n.uuid = BINARY ?", array)
 
             if (result == null) {
                 // This uuid isn't in the database yet, so add it
                 executeUpdate("INSERT INTO namespace (uuid) VALUES (?)", array)
 
-                result = getFirstColumn("SELECT n.id FROM namespace n WHERE n.uuid = ?", array)
+                result = getFirstColumn("SELECT n.id FROM namespace n WHERE BINARY n.uuid = BINARY ?", array)
             }
 
             if (result != null) {

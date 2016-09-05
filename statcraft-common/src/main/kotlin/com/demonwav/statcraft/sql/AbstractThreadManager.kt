@@ -23,14 +23,14 @@ abstract class AbstractThreadManager : ThreadManager {
     override fun <T> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T> {
         val promise = PromiseImpl<T>()
         scheduleAsync(Runnable {
-            promise.setValue(StatCraft.instance.databaseManager.getFirstColumn<T>(query, params))
+            promise.setValue(StatCraft.instance.databaseManager.getFirstColumn<T>(query, *params))
         })
         return promise
     }
 
     override fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?) {
         scheduleAsync(Runnable {
-            StatCraft.instance.databaseManager.execute(query, params)
+            StatCraft.instance.databaseManager.executeUpdate(query, *params)
         })
     }
 

@@ -18,7 +18,7 @@ abstract class StatCraftStatistic {
      * The StatCraftApi instance which is associated with this StatCraftStatistic. This is assigned
      * when the statistic is registered with the API. Never null.
      */
-    lateinit var api: StatCraftApi<*>
+    lateinit var api: StatCraftApi
 
     /**
      * The human readable name of this statistic. Not null.

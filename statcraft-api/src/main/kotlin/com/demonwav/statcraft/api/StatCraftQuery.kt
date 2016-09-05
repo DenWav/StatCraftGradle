@@ -12,6 +12,8 @@ package com.demonwav.statcraft.api
 import com.demonwav.statcraft.StatCraft
 import com.demonwav.statcraft.api.exceptions.StatCraftStatisticTypeNotDefined
 import com.demonwav.statcraft.sql.Promise
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.UUID
 
 /**
@@ -340,6 +342,58 @@ class StatCraftQuery(
             secondaryType.index,
             primaryTarget,
             secondaryTarget
+        )
+    }
+
+    /**
+     * TODO
+     */
+    fun getSum(player: UUID, world: UUID): Promise<BigDecimal> {
+        return StatCraft.instance.threadManager.scheduleQuery<BigDecimal>(
+            //language=MySQL
+            """
+            SELECT SUM(s.value) FROM stats s WHERE
+            s.namespace_id = ? AND
+            s.stat_id = ? AND
+            s.player_id = ? AND
+            s.world_id = ? AND
+            s.primary_stat_type_id = ? AND
+            s.secondary_stat_type_id = ?
+            """.trimIndent(),
+
+            statistic.api.id,
+            statistic.index,
+            StatCraft.instance.databaseManager.getPlayerId(player),
+            StatCraft.instance.databaseManager.getWorldId(world),
+            primaryType.index,
+            secondaryType.index
+        )
+    }
+
+    /**
+     * TODO
+     */
+    fun getSum(player: UUID, world: UUID, primaryTarget: String): Promise<BigDecimal> {
+        return StatCraft.instance.threadManager.scheduleQuery<BigDecimal>(
+            //language=MySQL
+            """
+            SELECT SUM(s.value) FROM stats s WHERE
+            s.namespace_id = ? AND
+            s.stat_id = ? AND
+            s.player_id = ? AND
+            s.world_id = ? AND
+            s.primary_stat_type_id = ? AND
+            s.secondary_stat_type_id = ? AND
+            s.primary_stat_target = ?
+            """.trimIndent(),
+
+            statistic.api.id,
+            statistic.index,
+            StatCraft.instance.databaseManager.getPlayerId(player),
+            StatCraft.instance.databaseManager.getWorldId(world),
+            primaryType.index,
+            secondaryType.index,
+            primaryTarget
         )
     }
 

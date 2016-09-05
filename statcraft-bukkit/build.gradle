@@ -7,6 +7,8 @@
  * MIT License
  */
 
+import org.apache.tools.ant.filters.ReplaceTokens
+
 repositories {
     maven {
         name = "spigotmc-repo"
@@ -20,18 +22,14 @@ dependencies {
 }
 
 processResources {
-    from("src/main/resources") {
-        expand "version": project.version
+    from('src/main/resources') {
+        filter ReplaceTokens, tokens: [version: version]
     }
 }
 
 shadowJar {
     dependencies {
-        // Bukkit includes snakeyaml, but we bundle configurate with our Bukkit jars, which also includes it
-        // So we manually exclude it
-        exclude(dependency("org.yaml::"))
-
-        // Bukkit also includes guava, which is bundled with configurate-core, so again we exclude it
+        // Bukkit includes guava, which is bundled with configurate-core, so we exclude it
         exclude(dependency("com.google.guava::"))
     }
 }
