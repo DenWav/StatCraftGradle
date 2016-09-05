@@ -104,6 +104,7 @@ class SpongeStatCraft : StatCraft {
     }
 
     companion object {
+        @JvmStatic
         lateinit var instance: SpongeStatCraft
     }
 }
