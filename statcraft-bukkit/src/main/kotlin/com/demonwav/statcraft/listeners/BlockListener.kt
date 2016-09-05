@@ -18,16 +18,15 @@ import org.bukkit.event.block.BlockPlaceEvent
 
 class BlockListener : Listener {
 
-    private val blockBreak = Blocks.getInstance().query().primaryType(Blocks.BlockStatType.BROKEN).build()
-    private val blockPlace = Blocks.getInstance().query().primaryType(Blocks.BlockStatType.PLACED).build()
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBlockBreak(event: BlockBreakEvent) {
-        blockBreak.incrementValue(event.player.uniqueId, event.player.world.uid, event.block.type.name)
+        Blocks.getInstance().query().primaryType(Blocks.BlockStatType.BROKEN)
+            .incrementValue(event.player.uniqueId, event.player.world.uid, event.block.type.name)
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBlockPlace(event: BlockPlaceEvent) {
-        blockPlace.incrementValue(event.player.uniqueId, event.player.world.uid, event.block.type.name)
+        Blocks.getInstance().query().primaryType(Blocks.BlockStatType.PLACED)
+            .incrementValue(event.player.uniqueId, event.player.world.uid, event.block.type.name)
     }
 }

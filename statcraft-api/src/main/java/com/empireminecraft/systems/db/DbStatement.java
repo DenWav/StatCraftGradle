@@ -267,7 +267,7 @@ public class DbStatement implements AutoCloseable {
             resultSet = null;
             dbConn = null;
         } catch (SQLException ex) {
-            StatCraft.Companion.getInstance().warn("Failed to close DB connection: " + query);
+            StatCraft.getInstance().warn("Failed to close DB connection: " + query);
             ex.printStackTrace();
         }
 

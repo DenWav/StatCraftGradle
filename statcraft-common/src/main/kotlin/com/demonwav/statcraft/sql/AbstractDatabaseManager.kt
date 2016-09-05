@@ -39,11 +39,11 @@ abstract class AbstractDatabaseManager : DatabaseManager {
             config.poolName = "StatCraftDb"
 
             config.dataSourceClassName = MariaDbDataSource::class.java.name
-            config.username = StatCraft.instance.getStatConfig().mysql.username
-            config.password = StatCraft.instance.getStatConfig().mysql.password
-            config.addDataSourceProperty("databaseName", StatCraft.instance.getStatConfig().mysql.database)
-            config.addDataSourceProperty("portNumber", StatCraft.instance.getStatConfig().mysql.port)
-            config.addDataSourceProperty("serverName", StatCraft.instance.getStatConfig().mysql.hostname)
+            config.username = StatCraft.getInstance().statConfig.mysql.username
+            config.password = StatCraft.getInstance().statConfig.mysql.password
+            config.addDataSourceProperty("databaseName", StatCraft.getInstance().statConfig.mysql.database)
+            config.addDataSourceProperty("portNumber", StatCraft.getInstance().statConfig.mysql.port)
+            config.addDataSourceProperty("serverName", StatCraft.getInstance().statConfig.mysql.hostname)
 
             config.addDataSourceProperty("properties",
                 "cachePrepStmts=true&" +
@@ -68,11 +68,11 @@ abstract class AbstractDatabaseManager : DatabaseManager {
         } catch (e: Exception) {
             e.printStackTrace()
 
-            StatCraft.instance.error(" *** StatCraft was unable to communicate with the database,")
-            StatCraft.instance.error(" *** please check your settings and reload, StatCraft will")
-            StatCraft.instance.error(" *** now be disabled.")
+            StatCraft.getInstance().error(" *** StatCraft was unable to communicate with the database,")
+            StatCraft.getInstance().error(" *** please check your settings and reload, StatCraft will")
+            StatCraft.getInstance().error(" *** now be disabled.")
 
-            StatCraft.instance.disablePlugin()
+            StatCraft.getInstance().disablePlugin()
         }
     }
 
@@ -81,12 +81,12 @@ abstract class AbstractDatabaseManager : DatabaseManager {
     override fun setupDatabase() {
         for (table in Table.values()) {
             checkTable(table)
-            if (!StatCraft.instance.isEnabled()) {
+            if (!StatCraft.getInstance().isEnabled) {
                 break
             }
         }
-        if (StatCraft.instance.isEnabled()) {
-            StatCraft.instance.info("Database verified successfully.")
+        if (StatCraft.getInstance().isEnabled) {
+            StatCraft.getInstance().info("Database verified successfully.")
         }
     }
 
@@ -120,7 +120,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
                             // Table exists
                             // Make sure the engine is correct
                             if (resultSet!!.getString("ENGINE") != "InnoDB") {
-                                StatCraft.instance.warn("${table.getName()} is using an incorrect engine.")
+                                StatCraft.getInstance().warn("${table.getName()} is using an incorrect engine.")
                                 remakeTable(table, true)
                             } else {
                                 // Make sure the columns are correct
@@ -131,7 +131,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
                                 if (intResultSet?.last() == true) {
                                     // Make sure there is the correct number of columns
                                     if (intResultSet?.row != table.getColumnCount()) {
-                                        StatCraft.instance.warn("${table.getName()} has an incorrect number of columns.")
+                                        StatCraft.getInstance().warn("${table.getName()} has an incorrect number of columns.")
                                         remakeTable(table, true)
                                     } else {
                                         // Make sure the columns are correct
@@ -139,14 +139,14 @@ abstract class AbstractDatabaseManager : DatabaseManager {
                                         for (column in table.columnNames) {
                                             intResultSet?.next()
                                             if (intResultSet?.getString("Field") != column) {
-                                                StatCraft.instance.warn("${table.getName()} has incorrect columns.")
+                                                StatCraft.getInstance().warn("${table.getName()} has incorrect columns.")
                                                 remakeTable(table, true)
                                                 break
                                             }
                                         }
                                     }
                                 } else {
-                                    StatCraft.instance.warn("${table.getName()} has no columns.")
+                                    StatCraft.getInstance().warn("${table.getName()} has no columns.")
                                     remakeTable(table, true)
                                 }
                             }
@@ -165,16 +165,16 @@ abstract class AbstractDatabaseManager : DatabaseManager {
     }
 
     private fun remakeTable(table: Table, ask: Boolean) {
-        if (!ask || StatCraft.instance.getStatConfig().mysql.forceSetup) {
+        if (!ask || StatCraft.getInstance().statConfig.mysql.forceSetup) {
             dropTable(table)
             createTable(table)
-            StatCraft.instance.info("Created table `${table.getName()}`")
+            StatCraft.getInstance().info("Created table `${table.getName()}`")
         } else {
-            StatCraft.instance.error(" *** ${table.getName()} is not setup correctly and conflicts with StatCraft's setup.")
-            StatCraft.instance.error(" *** Change mysql.forceSetup, remove or rename this table, or create a new database for")
-            StatCraft.instance.error(" *** StatCraft to use. StatCraft will not run unless there are no conflicting tables.")
-            StatCraft.instance.error(" *** StatCraft will now be disabled.")
-            StatCraft.instance.disablePlugin()
+            StatCraft.getInstance().error(" *** ${table.getName()} is not setup correctly and conflicts with StatCraft's setup.")
+            StatCraft.getInstance().error(" *** Change mysql.forceSetup, remove or rename this table, or create a new database for")
+            StatCraft.getInstance().error(" *** StatCraft to use. StatCraft will not run unless there are no conflicting tables.")
+            StatCraft.getInstance().error(" *** StatCraft will now be disabled.")
+            StatCraft.getInstance().disablePlugin()
         }
     }
 
@@ -279,7 +279,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
 
                 if (result == null) {
                     // This uuid isn't in the database yet, so add it
-                    val name = StatCraft.instance.getPlayerName(uuid)
+                    val name = StatCraft.getInstance().getPlayerName(uuid)
 
                     // Only add it to the database if we can actually get a player name
                     if (name != null) {
@@ -300,9 +300,9 @@ abstract class AbstractDatabaseManager : DatabaseManager {
         }
 
     override fun getPlayerId(name: String): Int? {
-        if (StatCraft.instance.players.contains(name)) {
+        if (StatCraft.getInstance().players.contains(name)) {
             // Get the UUID of the player were are looking for and use that instead
-            return getPlayerId(StatCraft.instance.players[name] as UUID)
+            return getPlayerId(StatCraft.getInstance().players[name] as UUID)
         }
 
         try {
@@ -328,7 +328,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
 
                 if (result == null) {
                     // This uuid isn't in the database yet, so add it
-                    val name = StatCraft.instance.getWorldName(uuid)
+                    val name = StatCraft.getInstance().getWorldName(uuid)
 
                     // Only add it to the database if we can actually get a world name
                     if (name != null) {

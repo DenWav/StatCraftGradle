@@ -9,15 +9,15 @@
 
 package com.demonwav.statcraft
 
-import org.bukkit.Bukkit
-import org.bukkit.World
-import org.bukkit.entity.Player
+import org.spongepowered.api.Sponge
+import org.spongepowered.api.entity.living.player.Player
+import org.spongepowered.api.world.World
 
-class BukkitServerStatUpdater : ServerStatUpdater {
+class SpongeServerStatUpdater : ServerStatUpdater {
 
-    class BukkitMove : ServerStatUpdater.Move<Player?, World?> {
+    class SpongeMove : ServerStatUpdater.Move<Player?, World?> {
         override fun run() {
-            Bukkit.getServer().onlinePlayers.forEach { run(it) }
+            Sponge.getServer().onlinePlayers.forEach { run(it) }
         }
 
         override fun run(player: Player?) {
@@ -27,6 +27,5 @@ class BukkitServerStatUpdater : ServerStatUpdater {
         override fun run(player: Player?, world: World?) {
             TODO()
         }
-
     }
 }

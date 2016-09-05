@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * TODO
  */
-interface StatCraft {
+interface StatCraftWat {
 
     /**
      * TODO

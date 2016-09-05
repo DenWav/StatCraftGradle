@@ -30,7 +30,7 @@ class StatCraftApi(val plugin: Any) {
      * TODO
      */
     val id: Int by lazy {
-        StatCraft.instance.databaseManager.getPluginId(namespace)
+        StatCraft.getInstance().databaseManager.getPluginId(namespace)
     }
 
     /**

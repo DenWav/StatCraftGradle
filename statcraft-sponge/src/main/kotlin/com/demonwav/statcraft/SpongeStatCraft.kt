@@ -12,8 +12,11 @@ package com.demonwav.statcraft
 import com.demonwav.statcraft.api.StatCraftApi
 import com.demonwav.statcraft.api.StatCraftNamespace
 import com.demonwav.statcraft.commands.BaseCommand
+import com.demonwav.statcraft.commands.SpongeBaseCommand
 import com.demonwav.statcraft.config.Config
 import com.demonwav.statcraft.sql.DatabaseManager
+import com.demonwav.statcraft.sql.SpongeDatabaseManager
+import com.demonwav.statcraft.sql.SpongeThreadManager
 import com.demonwav.statcraft.sql.ThreadManager
 import com.google.inject.Inject
 import org.slf4j.Logger
@@ -21,7 +24,7 @@ import org.spongepowered.api.Sponge
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.game.state.GameStartedServerEvent
 import org.spongepowered.api.plugin.Plugin
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @Plugin(
@@ -31,17 +34,50 @@ import java.util.concurrent.ConcurrentHashMap
 )
 @StatCraftNamespace("4f89d232-eb02-47b8-abe0-fb42b617505b")
 class SpongeStatCraft : StatCraft {
-    override fun getStatConfig(): Config {
-        TODO()
-    }
 
-    override fun getApi(plugin: Any): StatCraftApi {
-        TODO()
-    }
+    @Inject
+    private lateinit var logger: Logger
+
+    private val databaseManager = SpongeDatabaseManager()
+
+    private val lastFireTime = ConcurrentHashMap<UUID, Int>()
+    private val lastDrownTime = ConcurrentHashMap<UUID, Int>()
+    private val lastPoisonTime = ConcurrentHashMap<UUID, Int>()
+    private val lastWitherTime = ConcurrentHashMap<UUID, Int>()
+
+    private val threadManager = SpongeThreadManager()
+
+    private val baseCommand = SpongeBaseCommand()
+
+    private var timeZone: String = Calendar.getInstance().timeZone.getDisplayName(false, TimeZone.SHORT)
+
+    private val players = ConcurrentHashMap<String, UUID>()
+    private val moveUpdater = SpongeServerStatUpdater.SpongeMove()
 
     init {
-        StatCraft.instance = this
+        // Set global states
+        StatCraft.Companion.instance = this
         SpongeStatCraft.instance = this
+    }
+
+    override fun getDatabaseManager() = databaseManager
+
+    override fun getLastFireTime() = lastFireTime
+    override fun getlastDrownTime() = lastDrownTime
+    override fun getLastPoisonTime() = lastPoisonTime
+    override fun getLastWitherTime() = lastWitherTime
+
+    override fun getThreadManager() = threadManager
+
+    override fun getBaseCommand() = baseCommand
+
+    override fun getTimeZone() = timeZone
+
+    override fun getPlayers() = players
+    override fun getMoveUpdater() = moveUpdater
+
+    override fun getStatConfig(): Config {
+        TODO()
     }
 
     override fun getPlayerName(uuid: UUID): String? {
@@ -55,32 +91,6 @@ class SpongeStatCraft : StatCraft {
     override fun isEnabled(): Boolean {
         TODO()
     }
-
-    @Inject
-    private lateinit var logger: Logger
-
-    override val databaseManager: DatabaseManager
-        get() = throw UnsupportedOperationException()
-    override val lastFireTime: ConcurrentHashMap<UUID, Int>
-        get() = throw UnsupportedOperationException()
-    override val lastDrownTime: ConcurrentHashMap<UUID, Int>
-        get() = throw UnsupportedOperationException()
-    override val lastPoisonTime: ConcurrentHashMap<UUID, Int>
-        get() = throw UnsupportedOperationException()
-    override val lastWitherTime: ConcurrentHashMap<UUID, Int>
-        get() = throw UnsupportedOperationException()
-    override val threadManager: ThreadManager
-        get() = throw UnsupportedOperationException()
-    override val baseCommand: BaseCommand
-        get() = throw UnsupportedOperationException()
-    override var timeZone: String
-        get() = throw UnsupportedOperationException()
-        set(value) {
-        }
-    override val players: ConcurrentHashMap<String, UUID>
-        get() = throw UnsupportedOperationException()
-    override val moveUpdater: ServerStatUpdater.Move<*, *>
-        get() = throw UnsupportedOperationException()
 
     override fun disablePlugin() {
         // TODO
@@ -98,9 +108,8 @@ class SpongeStatCraft : StatCraft {
         logger.error(s)
     }
 
-    @Listener
-    fun onServerStart(event: GameStartedServerEvent) {
-        error("STATCRAFT")
+    override fun getApi(plugin: Any): StatCraftApi {
+        TODO()
     }
 
     companion object {

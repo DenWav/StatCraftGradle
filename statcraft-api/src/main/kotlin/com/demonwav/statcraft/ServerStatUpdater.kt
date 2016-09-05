@@ -17,7 +17,7 @@ interface ServerStatUpdater {
     /**
      * TODO
      */
-    interface Move<in P, in W> : Runnable {
+    interface Move<in P : Any?, in W : Any?> : Runnable {
         /**
          * TODO
          */

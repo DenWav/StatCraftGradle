@@ -18,13 +18,13 @@ class PromiseImpl<T> : Promise<T> {
     override fun setValue(t: T?) {
         // Don't bother executing if no work was set
         if (work != null) {
-            StatCraft.instance.threadManager.scheduleMain(Runnable { work?.invoke(t) })
+            StatCraft.getInstance().threadManager.scheduleMain(Runnable { work?.invoke(t) })
         }
     }
 
     override fun setError(message: String) {
         work = null
-        StatCraft.instance.error(message)
+        StatCraft.getInstance().error(message)
     }
 
     override fun done(work: (T?) -> Unit) {

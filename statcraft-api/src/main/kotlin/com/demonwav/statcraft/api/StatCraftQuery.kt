@@ -23,16 +23,21 @@ class StatCraftQuery(
     /**
      * TODO
      */
-    private val statistic: StatCraftStatistic,
-    /**
-     * TODO
-     */
-    private val primaryType: StatCraftStatisticType,
-    /**
-     * TODO
-     */
-    private val secondaryType: StatCraftStatisticType
+    private val statistic: StatCraftStatistic
 ) {
+    private var primaryType: StatCraftStatisticType = StatCraftApi.UNIT_TYPE
+    private var secondaryType: StatCraftStatisticType = StatCraftApi.UNIT_TYPE
+
+    fun primaryType(primaryType: StatCraftStatisticType): StatCraftQuery {
+        this.primaryType = primaryType
+        return this
+    }
+
+    fun secondaryType(secondaryType: StatCraftStatisticType): StatCraftQuery {
+        this.secondaryType = secondaryType
+        return this
+    }
+
     // ***************************
     // Increment
     // ***************************
@@ -102,7 +107,7 @@ class StatCraftQuery(
      * TODO
      */
     fun addValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        StatCraft.instance.threadManager.scheduleUpdate(
+        StatCraft.getInstance().threadManager.scheduleUpdate(
             //language=MySQL
             """
             INSERT INTO stats (
@@ -120,8 +125,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.instance.databaseManager.getPlayerId(player),
-            StatCraft.instance.databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player),
+            StatCraft.getInstance().databaseManager.getWorldId(world),
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -176,7 +181,7 @@ class StatCraftQuery(
      * TODO
      */
     fun multiplyValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        StatCraft.instance.threadManager.scheduleUpdate(
+        StatCraft.getInstance().threadManager.scheduleUpdate(
             //language=MySQL
             """
             UPDATE stats SET `value` = `value` * ? WHERE
@@ -193,8 +198,8 @@ class StatCraftQuery(
             value,
             statistic.api.id,
             statistic.index,
-            StatCraft.instance.databaseManager.getPlayerId(player),
-            StatCraft.instance.databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player),
+            StatCraft.getInstance().databaseManager.getWorldId(world),
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -223,7 +228,7 @@ class StatCraftQuery(
      * TODO
      */
     fun divideValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        StatCraft.instance.threadManager.scheduleUpdate(
+        StatCraft.getInstance().threadManager.scheduleUpdate(
             //language=MySQL
             """
             UPDATE stats SET `value` = `value` / ? WHERE
@@ -240,8 +245,8 @@ class StatCraftQuery(
             value,
             statistic.api.id,
             statistic.index,
-            StatCraft.instance.databaseManager.getPlayerId(player),
-            StatCraft.instance.databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player),
+            StatCraft.getInstance().databaseManager.getWorldId(world),
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -270,7 +275,7 @@ class StatCraftQuery(
      * TODO
      */
     fun setValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        StatCraft.instance.threadManager.scheduleUpdate(
+        StatCraft.getInstance().threadManager.scheduleUpdate(
             //language=MySQL
             """
             INSERT INTO stats (
@@ -288,8 +293,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.instance.databaseManager.getPlayerId(player),
-            StatCraft.instance.databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player),
+            StatCraft.getInstance().databaseManager.getWorldId(world),
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -320,7 +325,7 @@ class StatCraftQuery(
      * TODO
      */
     fun getValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String): Promise<Long> {
-        return StatCraft.instance.threadManager.scheduleQuery<Long>(
+        return StatCraft.getInstance().threadManager.scheduleQuery<Long>(
             //language=MySQL
             """
             SELECT s.value FROM stats s WHERE
@@ -336,8 +341,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.instance.databaseManager.getPlayerId(player),
-            StatCraft.instance.databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player),
+            StatCraft.getInstance().databaseManager.getWorldId(world),
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -349,7 +354,7 @@ class StatCraftQuery(
      * TODO
      */
     fun getSum(player: UUID, world: UUID): Promise<BigDecimal> {
-        return StatCraft.instance.threadManager.scheduleQuery<BigDecimal>(
+        return StatCraft.getInstance().threadManager.scheduleQuery<BigDecimal>(
             //language=MySQL
             """
             SELECT SUM(s.value) FROM stats s WHERE
@@ -363,8 +368,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.instance.databaseManager.getPlayerId(player),
-            StatCraft.instance.databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player),
+            StatCraft.getInstance().databaseManager.getWorldId(world),
             primaryType.index,
             secondaryType.index
         )
@@ -374,7 +379,7 @@ class StatCraftQuery(
      * TODO
      */
     fun getSum(player: UUID, world: UUID, primaryTarget: String): Promise<BigDecimal> {
-        return StatCraft.instance.threadManager.scheduleQuery<BigDecimal>(
+        return StatCraft.getInstance().threadManager.scheduleQuery<BigDecimal>(
             //language=MySQL
             """
             SELECT SUM(s.value) FROM stats s WHERE
@@ -389,62 +394,12 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.instance.databaseManager.getPlayerId(player),
-            StatCraft.instance.databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player),
+            StatCraft.getInstance().databaseManager.getWorldId(world),
             primaryType.index,
             secondaryType.index,
             primaryTarget
         )
-    }
-
-    /**
-     * TODO
-     */
-    class StatCraftStatisticQueryBuilder(
-        /**
-         * TODO
-         */
-        private val statistic: StatCraftStatistic
-    ) {
-        /**
-         * TODO
-         */
-        private var primaryType: StatCraftStatisticType = StatCraftApi.UNIT_TYPE
-        /**
-         * TODO
-         */
-        private var secondaryType: StatCraftStatisticType = StatCraftApi.UNIT_TYPE
-
-        /**
-         * TODO
-         */
-        fun primaryType(type: StatCraftStatisticType): StatCraftStatisticQueryBuilder {
-            primaryType = type
-            return this
-        }
-
-        /**
-         * TODO
-         */
-        fun secondaryType(type: StatCraftStatisticType): StatCraftStatisticQueryBuilder {
-            secondaryType = type
-            return this
-        }
-
-        /**
-         * TODO
-         */
-        fun build(): StatCraftQuery {
-            if (!statistic.primaryStatTypes.contains(primaryType)) {
-                throw StatCraftStatisticTypeNotDefined()
-            }
-
-            if (!statistic.secondaryStatTypes.contains(secondaryType)) {
-                throw StatCraftStatisticTypeNotDefined()
-            }
-
-            return StatCraftQuery(statistic, primaryType, secondaryType)
-        }
     }
 
     companion object {

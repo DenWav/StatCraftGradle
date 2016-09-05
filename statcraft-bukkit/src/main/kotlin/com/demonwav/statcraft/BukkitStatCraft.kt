@@ -12,68 +12,37 @@ package com.demonwav.statcraft
 import com.demonwav.statcraft.api.StatCraftApi
 import com.demonwav.statcraft.api.StatCraftNamespace
 import com.demonwav.statcraft.api.exceptions.StatCraftNamespaceAlreadyDefinedException
-import com.demonwav.statcraft.commands.BaseCommand
+import com.demonwav.statcraft.commands.BukkitBaseCommand
 import com.demonwav.statcraft.config.Config
 import com.demonwav.statcraft.listeners.BlockListener
 import com.demonwav.statcraft.sql.BukkitDatabaseManager
 import com.demonwav.statcraft.sql.BukkitThreadManager
-import com.demonwav.statcraft.stats.AnimalsBred
-import com.demonwav.statcraft.stats.Blocks
-import com.demonwav.statcraft.stats.Buckets
-import com.demonwav.statcraft.stats.Damage
-import com.demonwav.statcraft.stats.Deaths
-import com.demonwav.statcraft.stats.Eating
-import com.demonwav.statcraft.stats.FiresStarted
-import com.demonwav.statcraft.stats.FishCaught
-import com.demonwav.statcraft.stats.HighestLevel
-import com.demonwav.statcraft.stats.Items
-import com.demonwav.statcraft.stats.Joins
-import com.demonwav.statcraft.stats.Jumps
-import com.demonwav.statcraft.stats.Kicks
-import com.demonwav.statcraft.stats.Kills
-import com.demonwav.statcraft.stats.MessagesSpoken
-import com.demonwav.statcraft.stats.Movement
-import com.demonwav.statcraft.stats.OnFire
-import com.demonwav.statcraft.stats.PlayTime
-import com.demonwav.statcraft.stats.Projectiles
-import com.demonwav.statcraft.stats.Seen
-import com.demonwav.statcraft.stats.SheepSheared
-import com.demonwav.statcraft.stats.SleepTime
-import com.demonwav.statcraft.stats.TabCompletions
-import com.demonwav.statcraft.stats.TntDetonated
-import com.demonwav.statcraft.stats.ToolsBroken
-import com.demonwav.statcraft.stats.WordsSpoken
-import com.demonwav.statcraft.stats.WorldChanges
-import com.demonwav.statcraft.stats.XpGained
+import com.demonwav.statcraft.stats.*
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader
 import ninja.leaping.configurate.objectmapping.ObjectMapper
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
-import java.util.Calendar
-import java.util.HashMap
-import java.util.TimeZone
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @StatCraftNamespace("4f89d232-eb02-47b8-abe0-fb42b617505b")
 class BukkitStatCraft : JavaPlugin(), StatCraft {
 
-    override val databaseManager = BukkitDatabaseManager()
+    private val databaseManager = BukkitDatabaseManager()
 
-    override val lastFireTime = ConcurrentHashMap<UUID, Int>()
-    override val lastDrownTime = ConcurrentHashMap<UUID, Int>()
-    override val lastPoisonTime = ConcurrentHashMap<UUID, Int>()
-    override val lastWitherTime = ConcurrentHashMap<UUID, Int>()
+    private val lastFireTime = ConcurrentHashMap<UUID, Int>()
+    private val lastDrownTime = ConcurrentHashMap<UUID, Int>()
+    private val lastPoisonTime = ConcurrentHashMap<UUID, Int>()
+    private val lastWitherTime = ConcurrentHashMap<UUID, Int>()
 
-    override val threadManager = BukkitThreadManager()
+    private val threadManager = BukkitThreadManager()
 
-    override val baseCommand: BaseCommand
-        get() = throw UnsupportedOperationException()
+    private val baseCommand = BukkitBaseCommand()
 
-    override var timeZone: String = Calendar.getInstance().timeZone.getDisplayName(false, TimeZone.SHORT)
+    private var timeZone: String = Calendar.getInstance().timeZone.getDisplayName(false, TimeZone.SHORT)
 
-    override val players = ConcurrentHashMap<String, UUID>()
-    override val moveUpdater = BukkitServerStatUpdater.BukkitMove()
+    private val players = ConcurrentHashMap<String, UUID>()
+    private val moveUpdater = BukkitServerStatUpdater.BukkitMove()
 
     // Config
     private var _statConfig: Config? = null
@@ -86,7 +55,7 @@ class BukkitStatCraft : JavaPlugin(), StatCraft {
 
     init {
         // Set global states
-        StatCraft.instance = this
+        StatCraft.Companion.instance = this
         BukkitStatCraft.instance = this
     }
 
@@ -120,8 +89,8 @@ class BukkitStatCraft : JavaPlugin(), StatCraft {
            return
         }
 
-        if (!getStatConfig().timezone.equals("auto", true)) {
-            timeZone = getStatConfig().timezone
+        if (!statConfig.timezone.equals("auto", true)) {
+            timeZone = statConfig.timezone
         }
 
         threadManager.startExecutors()
@@ -163,6 +132,22 @@ class BukkitStatCraft : JavaPlugin(), StatCraft {
     fun createListeners() {
         server.pluginManager.registerEvents(BlockListener(), this)
     }
+
+    override fun getDatabaseManager() = databaseManager
+
+    override fun getLastFireTime() = lastFireTime
+    override fun getlastDrownTime() = lastDrownTime
+    override fun getLastPoisonTime() = lastPoisonTime
+    override fun getLastWitherTime() = lastWitherTime
+
+    override fun getThreadManager() = threadManager
+
+    override fun getBaseCommand() = baseCommand
+
+    override fun getTimeZone() = timeZone
+
+    override fun getPlayers() = players
+    override fun getMoveUpdater() = moveUpdater
 
     override fun getStatConfig() = _statConfig!!
 

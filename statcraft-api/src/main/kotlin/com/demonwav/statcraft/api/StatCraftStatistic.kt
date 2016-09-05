@@ -48,7 +48,7 @@ abstract class StatCraftStatistic {
     /**
      * TODO
      */
-    fun query(): StatCraftQuery.StatCraftStatisticQueryBuilder {
-        return StatCraftQuery.StatCraftStatisticQueryBuilder(this)
+    fun query(): StatCraftQuery {
+        return StatCraftQuery(this)
     }
 }
