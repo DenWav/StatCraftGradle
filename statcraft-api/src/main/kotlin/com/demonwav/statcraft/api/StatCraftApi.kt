@@ -26,6 +26,12 @@ abstract class StatCraftApi<out T : Any>(val plugin: T, val statcraft: StatCraft
     val namespace: UUID by lazy {
         UUID.fromString(namespaceString)
     }
+    /**
+     * TODO
+     */
+    val id: Int by lazy {
+        StatCraft.instance.databaseManager.getPluginId(namespace)
+    }
 
     /**
      * TODO

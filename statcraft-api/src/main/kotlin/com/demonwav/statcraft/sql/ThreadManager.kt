@@ -9,8 +9,39 @@
 
 package com.demonwav.statcraft.sql
 
+import org.intellij.lang.annotations.Language
+
 /**
  * TODO
  */
-interface ThreadManager {
+interface ThreadManager : AutoCloseable {
+
+    /**
+     * TODO
+     */
+    fun <T> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T>
+
+    /**
+     * TODO
+     */
+    fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?)
+
+    /**
+     * TODO
+     */
+    fun scheduleAsync(runnable: Runnable)
+
+    /**
+     * TODO
+     */
+    fun scheduleMain(runnable: Runnable)
+
+    /**
+     * TODO
+     */
+    val async: Runnable
+    /**
+     * TODO
+     */
+    val main: Runnable
 }

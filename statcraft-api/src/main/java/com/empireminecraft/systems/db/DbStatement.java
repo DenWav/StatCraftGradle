@@ -45,11 +45,8 @@ public class DbStatement implements AutoCloseable {
     // Has changes been made to a transaction w/o commit/rollback on close
     public boolean isDirty = false;
 
-    private StatCraft statcraft;
-
-    public DbStatement(Connection connection, StatCraft statcraft) throws SQLException {
+    public DbStatement(Connection connection) throws SQLException {
         dbConn = connection;
-        this.statcraft = statcraft;
     }
 
     /**
@@ -270,7 +267,7 @@ public class DbStatement implements AutoCloseable {
             resultSet = null;
             dbConn = null;
         } catch (SQLException ex) {
-            statcraft.warn("Failed to close DB connection: " + query);
+            StatCraft.Companion.getInstance().warn("Failed to close DB connection: " + query);
             ex.printStackTrace();
         }
 

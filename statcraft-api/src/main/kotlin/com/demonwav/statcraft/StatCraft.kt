@@ -102,4 +102,8 @@ interface StatCraft {
      * TODO
      */
     fun error(s: String)
+
+    companion object {
+        lateinit var instance: StatCraft
+    }
 }

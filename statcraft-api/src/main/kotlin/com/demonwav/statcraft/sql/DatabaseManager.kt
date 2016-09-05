@@ -38,6 +38,11 @@ interface DatabaseManager : AutoCloseable {
     /**
      * TODO
      */
+    fun execute(@Language("MySQL") query: String, vararg params: Any)
+
+    /**
+     * TODO
+     */
     fun getFirstRow(@Language("MySQL") query: String, vararg params: Any): DbRow?
 
     /**
@@ -77,4 +82,9 @@ interface DatabaseManager : AutoCloseable {
      * TODO
      */
     fun getWorldId(name: String): Int?
+
+    /**
+     * TODO
+     */
+    fun getPluginId(uuid: UUID): Int
 }

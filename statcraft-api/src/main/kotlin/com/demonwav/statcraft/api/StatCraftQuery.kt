@@ -11,16 +11,13 @@ package com.demonwav.statcraft.api
 
 import com.demonwav.statcraft.StatCraft
 import com.demonwav.statcraft.api.exceptions.StatCraftStatisticTypeNotDefined
+import com.demonwav.statcraft.sql.Promise
 import java.util.UUID
 
 /**
  * TODO
  */
-class StatCraftStatisticQuery(
-    /**
-     * TODO
-     */
-    private val plugin: StatCraft,
+class StatCraftQuery(
     /**
      * TODO
      */
@@ -103,7 +100,33 @@ class StatCraftStatisticQuery(
      * TODO
      */
     fun addValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        TODO()
+        StatCraft.instance.threadManager.scheduleUpdate(
+            //language=MySQL
+            """
+            INSERT INTO stats (
+              namespace_id,
+              stat_id,
+              player_id,
+              world_id,
+              primary_stat_type_id,
+              secondary_stat_type_id,
+              primary_stat_target,
+              secondary_stat_target,
+              `value`
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `value` = `value` + ?
+            """.trimIndent(),
+
+            statistic.api.id,
+            statistic.index,
+            StatCraft.instance.databaseManager.getPlayerId(player),
+            StatCraft.instance.databaseManager.getWorldId(world),
+            primaryType.index,
+            secondaryType.index,
+            primaryTarget,
+            secondaryTarget,
+            value,
+            value
+        )
     }
 
     // ***************************
@@ -151,7 +174,30 @@ class StatCraftStatisticQuery(
      * TODO
      */
     fun multiplyValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        TODO()
+        StatCraft.instance.threadManager.scheduleUpdate(
+            //language=MySQL
+            """
+            UPDATE stats SET `value` = `value` * ? WHERE
+            namespace_id = ? AND
+            stat_id = ? AND
+            player_id = ? AND
+            world_id = ? AND
+            primary_stat_type_id = ? AND
+            secondary_stat_type_id = ? AND
+            primary_stat_target = ? AND
+            secondary_stat_target = ?
+            """.trimIndent(),
+
+            value,
+            statistic.api.id,
+            statistic.index,
+            StatCraft.instance.databaseManager.getPlayerId(player),
+            StatCraft.instance.databaseManager.getWorldId(world),
+            primaryType.index,
+            secondaryType.index,
+            primaryTarget,
+            secondaryTarget
+        )
     }
 
     // ***************************
@@ -175,7 +221,30 @@ class StatCraftStatisticQuery(
      * TODO
      */
     fun divideValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        TODO()
+        StatCraft.instance.threadManager.scheduleUpdate(
+            //language=MySQL
+            """
+            UPDATE stats SET `value` = `value` / ? WHERE
+            namespace_id = ? AND
+            stat_id = ? AND
+            player_id = ? AND
+            world_id = ? AND
+            primary_stat_type_id = ? AND
+            secondary_stat_type_id = ? AND
+            primary_stat_target = ? AND
+            secondary_stat_target = ?
+            """.trimIndent(),
+
+            value,
+            statistic.api.id,
+            statistic.index,
+            StatCraft.instance.databaseManager.getPlayerId(player),
+            StatCraft.instance.databaseManager.getWorldId(world),
+            primaryType.index,
+            secondaryType.index,
+            primaryTarget,
+            secondaryTarget
+        )
     }
 
     // ***************************
@@ -199,7 +268,33 @@ class StatCraftStatisticQuery(
      * TODO
      */
     fun setValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
-        TODO()
+        StatCraft.instance.threadManager.scheduleUpdate(
+            //language=MySQL
+            """
+            INSERT INTO stats (
+              namespace_id,
+              stat_id,
+              player_id,
+              world_id,
+              primary_stat_type_id,
+              secondary_stat_type_id,
+              primary_stat_target,
+              secondary_stat_target,
+              `value`
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `value` = ?
+            """.trimIndent(),
+
+            statistic.api.id,
+            statistic.index,
+            StatCraft.instance.databaseManager.getPlayerId(player),
+            StatCraft.instance.databaseManager.getWorldId(world),
+            primaryType.index,
+            secondaryType.index,
+            primaryTarget,
+            secondaryTarget,
+            value,
+            value
+        )
     }
 
     // ***************************
@@ -208,32 +303,50 @@ class StatCraftStatisticQuery(
     /**
      * TODO
      */
-    fun getValue(player: UUID, world: UUID): Long {
+    fun getValue(player: UUID, world: UUID): Promise<Long> {
         return getValue(player, world, EMPTY_STRING)
     }
 
     /**
      * TODO
      */
-    fun getValue(player: UUID, world: UUID, primaryTarget: String): Long {
+    fun getValue(player: UUID, world: UUID, primaryTarget: String): Promise<Long> {
         return getValue(player, world, primaryTarget, EMPTY_STRING)
     }
 
     /**
      * TODO
      */
-    fun getValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String): Long {
-        TODO()
+    fun getValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String): Promise<Long> {
+        return StatCraft.instance.threadManager.scheduleQuery<Long>(
+            //language=MySQL
+            """
+            SELECT s.value FROM stats s WHERE
+            s.namespace_id = ? AND
+            s.stat_id = ? AND
+            s.player_id = ? AND
+            s.world_id = ? AND
+            s.primary_stat_type_id = ? AND
+            s.secondary_stat_type_id = ? AND
+            s.primary_stat_target = ? AND
+            s.secondary_stat_target = ?
+            """.trimIndent(),
+
+            statistic.api.id,
+            statistic.index,
+            StatCraft.instance.databaseManager.getPlayerId(player),
+            StatCraft.instance.databaseManager.getWorldId(world),
+            primaryType.index,
+            secondaryType.index,
+            primaryTarget,
+            secondaryTarget
+        )
     }
 
     /**
      * TODO
      */
     class StatCraftStatisticQueryBuilder(
-        /**
-         * TODO
-         */
-        private val plugin: StatCraft,
         /**
          * TODO
          */
@@ -267,7 +380,7 @@ class StatCraftStatisticQuery(
         /**
          * TODO
          */
-        fun build(): StatCraftStatisticQuery {
+        fun build(): StatCraftQuery {
             if (!statistic.primaryStatTypes.contains(primaryType)) {
                 throw StatCraftStatisticTypeNotDefined()
             }
@@ -276,7 +389,7 @@ class StatCraftStatisticQuery(
                 throw StatCraftStatisticTypeNotDefined()
             }
 
-            return StatCraftStatisticQuery(plugin, statistic, primaryType, secondaryType)
+            return StatCraftQuery(statistic, primaryType, secondaryType)
         }
     }
 

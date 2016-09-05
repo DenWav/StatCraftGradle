@@ -17,3 +17,9 @@ dependencies {
     compileOnly "com.google.guava:guava:17.0"
     compileOnly "com.google.code.gson:gson:2.2.4"
 }
+
+shadowJar {
+    dependencies {
+        exclude(dependency("com.google.guava::"))
+    }
+}

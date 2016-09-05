@@ -28,6 +28,10 @@ import java.util.concurrent.ConcurrentHashMap
 )
 @StatCraftNamespace("4f89d232-eb02-47b8-abe0-fb42b617505b")
 class SpongeStatCraft : StatCraft {
+    init {
+        StatCraft.instance = this
+    }
+
     override fun getPlayerName(uuid: UUID): String? {
         return Sponge.getServer().getPlayer(uuid).get()?.name
     }

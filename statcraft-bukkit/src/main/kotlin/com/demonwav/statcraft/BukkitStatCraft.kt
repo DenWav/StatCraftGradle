@@ -20,12 +20,17 @@ import java.util.concurrent.ConcurrentHashMap
 
 @StatCraftNamespace("4f89d232-eb02-47b8-abe0-fb42b617505b")
 class BukkitStatCraft : JavaPlugin(), StatCraft {
+    init {
+        StatCraft.instance = this
+        BukkitStatCraft.instance = this
+    }
+
     override fun getPlayerName(uuid: UUID): String {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return server.getPlayer(uuid).name
     }
 
     override fun getWorldName(uuid: UUID): String {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return server.getWorld(uuid).name
     }
 
     override val databaseManager: DatabaseManager
@@ -68,5 +73,10 @@ class BukkitStatCraft : JavaPlugin(), StatCraft {
 
     override fun error(s: String) {
         logger.severe(s)
+    }
+
+    companion object {
+        @JvmStatic
+        lateinit var instance: BukkitStatCraft
     }
 }

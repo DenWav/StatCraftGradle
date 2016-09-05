@@ -9,7 +9,9 @@
 
 package com.demonwav.statcraft.sql
 
-enum class Table(val create: String, val columnNames: List<String>) {
+import org.intellij.lang.annotations.Language
+
+enum class Table(@Language("MySQL") val create: String, val columnNames: List<String>) {
 
     PLAYERS(
         //language=MySQL
@@ -45,6 +47,21 @@ enum class Table(val create: String, val columnNames: List<String>) {
         listOf("id", "uuid", "name", "custom_name")),
 
 
+    NAMESPACE(
+        //language=MySQL
+        """
+        CREATE TABLE `namespace` (
+          `uuid` binary(16) NOT NULL,
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `namespace_uuid_uindex` (`uuid`),
+          UNIQUE KEY `namespace_id_uindex` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        """.trimIndent(),
+        listOf("uuid", "id")
+    ),
+
+
     STATS(
         //language=MySQL
         """
@@ -61,6 +78,8 @@ enum class Table(val create: String, val columnNames: List<String>) {
           PRIMARY KEY (`namespace_id`,`stat_id`,`player_id`,`world_id`,`primary_stat_type_id`,`secondary_stat_type_id`,`primary_stat_target`,`secondary_stat_target`),
           KEY `player_index` (`player_id`),
           KEY `world_index` (`world_id`),
+          KEY `namespace_index` (`namespace_id`),
+          CONSTRAINT `stats_namespace_id_fk` FOREIGN KEY (`namespace_id`) REFERENCES `namespace` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
           CONSTRAINT `stats_players_id_fk` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
           CONSTRAINT `stats_worlds_id_fk` FOREIGN KEY (`world_id`) REFERENCES `worlds` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -84,8 +103,10 @@ enum class Table(val create: String, val columnNames: List<String>) {
           PRIMARY KEY (`namespace_id`,`stat_id`,`player_id`,`world_id`,`primary_stat_type_id`,`secondary_stat_type_id`,`primary_stat_target`,`secondary_stat_target`),
           KEY `player_index` (`player_id`),
           KEY `world_index` (`world_id`),
+          KEY `namespace_index` (`namespace_id`),
           KEY `1` (`namespace_id`,`stat_id`,`primary_stat_type_id`,`secondary_stat_type_id`,`primary_stat_target`,`secondary_stat_target`),
           KEY `2` (`namespace_id`,`stat_id`,`world_id`,`primary_stat_type_id`,`secondary_stat_type_id`,`primary_stat_target`,`secondary_stat_target`),
+          CONSTRAINT `stats_namespace_id_fk` FOREIGN KEY (`namespace_id`) REFERENCES `namespace` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
           CONSTRAINT `cached_stats_players_id_fk` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT ,
           CONSTRAINT `cached_stats_worlds_id_fk` FOREIGN KEY (`world_id`) REFERENCES `worlds` (`id`) ON UPDATE CASCADE ON UPDATE RESTRICT
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
