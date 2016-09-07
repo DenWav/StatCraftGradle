@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2015. Starlis LLC / dba Empire Minecraft
+ * https://empiredb.emc.gs/
  *
- * This source code is proprietary software and must not be redistributed without Starlis LLC's approval
- *
+ * MIT License
  */
 
 package com.empireminecraft.systems.db;

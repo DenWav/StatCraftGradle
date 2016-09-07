@@ -9,5 +9,7 @@
 
 package com.demonwav.statcraft.api.exceptions
 
-class StatCraftNamespaceIdNullException : RuntimeException() {
-}
+/**
+ * TODO
+ */
+class StatCraftNamespaceIdNullException : RuntimeException()
