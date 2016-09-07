@@ -111,7 +111,8 @@ abstract class AbstractStatCraft : StatCraft {
     }
 
     override fun shutdown() {
-
+        threadManager.close()
+        threadManager.shutdown()
     }
 
     protected fun registerStats() {
@@ -151,6 +152,24 @@ abstract class AbstractStatCraft : StatCraft {
     override fun getlastDrownTime() = lastDrownTime
     override fun getLastPoisonTime() = lastPoisonTime
     override fun getLastWitherTime() = lastWitherTime
+
+    override fun getLastFireTime(uuid: UUID) = lastFireTime[uuid] ?: 0
+    override fun getLastDrownTime(uuid: UUID) = lastDrownTime[uuid] ?: 0
+    override fun getLastPoisonTime(uuid: UUID) = lastPoisonTime[uuid] ?: 0
+    override fun getLastWitherTime(uuid: UUID) = lastWitherTime[uuid] ?: 0
+
+    override fun setLastFireTime(uuid: UUID, time: Int) {
+        lastFireTime[uuid] = time
+    }
+    override fun setLastDrowningTime(uuid: UUID, time: Int) {
+        lastDrownTime[uuid] = time
+    }
+    override fun setLastPoisonTime(uuid: UUID, time: Int) {
+        lastPoisonTime[uuid] = time
+    }
+    override fun setLastWitherTime(uuid: UUID, time: Int) {
+        lastWitherTime[uuid] = time
+    }
 
     override fun getStatConfig(): Config = statConfig
     override fun setStatConfig(config: Config) {

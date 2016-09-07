@@ -42,13 +42,8 @@ abstract class AbstractThreadManager : ThreadManager {
         mainQueue.offer(runnable)
     }
 
-    override val async: Runnable by lazy {
-        Async()
-    }
-
-    override val main: Runnable by lazy {
-        Main()
-    }
+    override val async: Runnable = Async()
+    override val main: Runnable = Main()
 
     override fun close() {
         // Do all work that's left immediately
@@ -56,7 +51,7 @@ abstract class AbstractThreadManager : ThreadManager {
         main.run()
     }
 
-    inner abstract class WorkingRunnable : Runnable {
+    internal inner abstract class WorkingRunnable : Runnable {
         abstract fun getQueue(): ConcurrentLinkedQueue<Runnable>
 
         override fun run() {
@@ -72,11 +67,11 @@ abstract class AbstractThreadManager : ThreadManager {
         }
     }
 
-    inner class Async : WorkingRunnable() {
+    internal inner class Async : WorkingRunnable() {
         override fun getQueue() = asyncQueue
     }
 
-    inner class Main : WorkingRunnable() {
+    internal inner class Main : WorkingRunnable() {
         override fun getQueue() = mainQueue
     }
 }

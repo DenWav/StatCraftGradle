@@ -17,4 +17,8 @@ class BukkitThreadManager : AbstractThreadManager() {
         Bukkit.getServer().scheduler.runTaskTimer(BukkitStatCraft.instance.plugin, main, 1L, 1L)
         Bukkit.getServer().scheduler.runTaskTimerAsynchronously(BukkitStatCraft.instance.plugin, async, 1L, 1L)
     }
+
+    override fun shutdown() {
+        Bukkit.getServer().scheduler.cancelTasks(BukkitStatCraft.instance.plugin)
+    }
 }

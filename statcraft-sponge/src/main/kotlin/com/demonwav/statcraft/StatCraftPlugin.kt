@@ -15,6 +15,7 @@ import org.spongepowered.api.config.DefaultConfig
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent
+import org.spongepowered.api.event.game.state.GameStoppingEvent
 import org.spongepowered.api.plugin.Plugin
 import java.io.File
 import java.nio.file.Path
@@ -45,5 +46,10 @@ class StatCraftPlugin {
     @Listener
     fun onGamePostInitializationEvent(event: GamePostInitializationEvent) {
         StatCraft.getInstance().postInit()
+    }
+
+    @Listener
+    fun onGameStoppingEvent(event: GameStoppingEvent) {
+        StatCraft.getInstance().shutdown()
     }
 }

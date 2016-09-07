@@ -19,4 +19,8 @@ class SpongeThreadManager : AbstractThreadManager() {
         Sponge.getScheduler()
             .createTaskBuilder().delayTicks(1).intervalTicks(1).async().execute(async).submit(SpongeStatCraft.instance.plugin)
     }
+
+    override fun shutdown() {
+        Sponge.getScheduler().getScheduledTasks(SpongeStatCraft.instance.plugin).forEach { it.cancel() }
+    }
 }

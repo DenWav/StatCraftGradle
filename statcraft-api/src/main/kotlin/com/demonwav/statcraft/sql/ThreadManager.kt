@@ -25,6 +25,11 @@ interface ThreadManager : AutoCloseable {
     /**
      * TODO
      */
+    fun shutdown()
+
+    /**
+     * TODO
+     */
     fun <T> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T>
 
     /**

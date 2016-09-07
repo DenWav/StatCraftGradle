@@ -24,4 +24,8 @@ class StatCraftPlugin : JavaPlugin() {
     override fun onEnable() {
         StatCraft.getInstance().postInit()
     }
+
+    override fun onDisable() {
+        StatCraft.getInstance().shutdown()
+    }
 }
