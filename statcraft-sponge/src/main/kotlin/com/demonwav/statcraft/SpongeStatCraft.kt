@@ -15,6 +15,10 @@ import com.demonwav.statcraft.listeners.BlockListener
 import com.demonwav.statcraft.sql.SpongeDatabaseManager
 import com.demonwav.statcraft.sql.SpongeThreadManager
 import org.spongepowered.api.Sponge
+import org.spongepowered.api.command.CommandMapping
+import org.spongepowered.api.command.spec.CommandSpec
+import org.spongepowered.api.text.Text
+import java.util.Optional
 import java.util.UUID
 
 @StatCraftNamespace("4f89d232-eb02-47b8-abe0-fb42b617505b")
@@ -24,6 +28,10 @@ class SpongeStatCraft(val plugin: StatCraftPlugin) : AbstractStatCraft() {
     private val threadManager = SpongeThreadManager()
     private val baseCommand = SpongeBaseCommand()
     private val moveUpdater = SpongeMoveUpdater()
+
+    private var enabled = true
+
+    private lateinit var commandMapping: Optional<CommandMapping>
 
     init {
         // Set global states
@@ -36,6 +44,17 @@ class SpongeStatCraft(val plugin: StatCraftPlugin) : AbstractStatCraft() {
         Sponge.getEventManager().registerListeners(plugin, BlockListener())
     }
 
+    override fun createCommands() {
+        commandMapping = Sponge.getCommandManager().register(
+            plugin,
+            CommandSpec.builder()
+                .description(Text.of())
+                .permission("")
+                .executor(SpongeBaseCommand())
+                .build(),
+            "sc")
+    }
+
     override fun getConfigFile() = plugin.defaultConfig
 
     override fun getDatabaseManager() = databaseManager
@@ -46,13 +65,15 @@ class SpongeStatCraft(val plugin: StatCraftPlugin) : AbstractStatCraft() {
     override fun getPlayerName(uuid: UUID) = Sponge.getServer().getPlayer(uuid).get()?.name
     override fun getWorldName(uuid: UUID) = Sponge.getServer().getWorld(uuid).get()?.name
 
-    override fun isEnabled(): Boolean {
-        // TODO
-        return true
-    }
+    override fun isEnabled() = enabled
 
     override fun disablePlugin() {
-        // TODO
+        enabled = false
+
+        shutdown()
+
+        Sponge.getEventManager().unregisterPluginListeners(plugin)
+        commandMapping.ifPresent { Sponge.getCommandManager().removeMapping(it) }
     }
 
     override fun info(s: String) = plugin.logger.info(s)

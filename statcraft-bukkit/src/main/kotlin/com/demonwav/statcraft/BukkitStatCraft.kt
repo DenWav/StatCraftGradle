@@ -41,6 +41,10 @@ class BukkitStatCraft(val plugin: StatCraftPlugin) : AbstractStatCraft() {
         plugin.server.pluginManager.registerEvents(BlockListener(), plugin)
     }
 
+    override fun createCommands() {
+        plugin.getCommand("sc").executor = baseCommand
+    }
+
     override fun getConfigFile() = configFile
 
     override fun getDatabaseManager() = databaseManager
@@ -53,7 +57,11 @@ class BukkitStatCraft(val plugin: StatCraftPlugin) : AbstractStatCraft() {
 
     override fun isEnabled() = plugin.isEnabled
 
-    override fun disablePlugin() = plugin.server.pluginManager.disablePlugin(plugin)
+    override fun disablePlugin() {
+        shutdown()
+
+        plugin.server.pluginManager.disablePlugin(plugin)
+    }
 
     override fun info(s: String) = plugin.logger.info(s)
     override fun warn(s: String) = plugin.logger.warning(s)

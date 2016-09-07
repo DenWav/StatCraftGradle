@@ -42,19 +42,14 @@ import com.demonwav.statcraft.stats.WorldChanges
 import com.demonwav.statcraft.stats.XpGained
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader
 import ninja.leaping.configurate.objectmapping.ObjectMapper
-import java.nio.file.Path
 import java.util.Calendar
+import java.util.Collections
 import java.util.HashMap
 import java.util.TimeZone
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 abstract class AbstractStatCraft : StatCraft {
-
-    private val lastFireTime = ConcurrentHashMap<UUID, Int>()
-    private val lastDrownTime = ConcurrentHashMap<UUID, Int>()
-    private val lastPoisonTime = ConcurrentHashMap<UUID, Int>()
-    private val lastWitherTime = ConcurrentHashMap<UUID, Int>()
 
     // Config
     private lateinit var statConfig: Config
@@ -69,9 +64,7 @@ abstract class AbstractStatCraft : StatCraft {
     // StatCraft's API instance
     protected lateinit var api: StatCraftApi
 
-    abstract fun getConfigFile(): Path
-
-    override fun preInit() {
+    fun preInit() {
         val loader = HoconConfigurationLoader.builder().setPath(getConfigFile()).build()
         val configMapper = ObjectMapper.forClass(Config::class.java).bindToNew()
 
@@ -80,8 +73,8 @@ abstract class AbstractStatCraft : StatCraft {
         statConfig = configMapper.populate(root)
 
         // Save config
-        if (!getConfigFile().parent.toFile().exists()) {
-            getConfigFile().parent.toFile().mkdir()
+        if (!configFile.parent.toFile().exists()) {
+            configFile.parent.toFile().mkdir()
         }
         configMapper.serialize(root)
         loader.save(root)
@@ -95,7 +88,7 @@ abstract class AbstractStatCraft : StatCraft {
         registerStats()
     }
 
-    override fun postInit() {
+    fun postInit() {
         databaseManager.setupDatabase()
         if (!isEnabled) {
             return
@@ -108,9 +101,10 @@ abstract class AbstractStatCraft : StatCraft {
         threadManager.startExecutors()
 
         createListeners()
+        createCommands()
     }
 
-    override fun shutdown() {
+    fun shutdown() {
         threadManager.close()
         threadManager.shutdown()
     }
@@ -147,29 +141,7 @@ abstract class AbstractStatCraft : StatCraft {
     }
 
     abstract fun createListeners()
-
-    override fun getLastFireTime() = lastFireTime
-    override fun getlastDrownTime() = lastDrownTime
-    override fun getLastPoisonTime() = lastPoisonTime
-    override fun getLastWitherTime() = lastWitherTime
-
-    override fun getLastFireTime(uuid: UUID) = lastFireTime[uuid] ?: 0
-    override fun getLastDrownTime(uuid: UUID) = lastDrownTime[uuid] ?: 0
-    override fun getLastPoisonTime(uuid: UUID) = lastPoisonTime[uuid] ?: 0
-    override fun getLastWitherTime(uuid: UUID) = lastWitherTime[uuid] ?: 0
-
-    override fun setLastFireTime(uuid: UUID, time: Int) {
-        lastFireTime[uuid] = time
-    }
-    override fun setLastDrowningTime(uuid: UUID, time: Int) {
-        lastDrownTime[uuid] = time
-    }
-    override fun setLastPoisonTime(uuid: UUID, time: Int) {
-        lastPoisonTime[uuid] = time
-    }
-    override fun setLastWitherTime(uuid: UUID, time: Int) {
-        lastWitherTime[uuid] = time
-    }
+    abstract fun createCommands()
 
     override fun getStatConfig(): Config = statConfig
     override fun setStatConfig(config: Config) {
@@ -178,7 +150,7 @@ abstract class AbstractStatCraft : StatCraft {
 
     override fun getTimeZone() = timeZone
 
-    override fun getPlayers() = players
+    override fun getPlayers(): Map<String, UUID> = Collections.unmodifiableMap(players)!!
 
     override fun getApi(plugin: Any): StatCraftApi {
         var api = apiMap[plugin]
