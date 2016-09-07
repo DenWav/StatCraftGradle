@@ -17,6 +17,7 @@ import com.demonwav.statcraft.sql.ThreadManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -104,7 +105,7 @@ public interface StatCraft {
      * @return
      */
     @NotNull
-    ServerStatUpdater.Move<?, ?> getMoveUpdater();
+    MoveUpdater<?, ?> getMoveUpdater();
 
     /**
      * TODO
@@ -112,6 +113,12 @@ public interface StatCraft {
      */
     @NotNull
     Config getStatConfig();
+
+    /**
+     *
+     * @param config
+     */
+    void setStatConfig(@NotNull Config config);
 
     /**
      * TODO
@@ -165,4 +172,19 @@ public interface StatCraft {
      */
     @NotNull
     StatCraftApi getApi(@NotNull Object plugin);
+
+    /**
+     * TODO
+     */
+    void preInit();
+
+    /**
+     * TODO
+     */
+    void postInit();
+
+    /**
+     * TODO
+     */
+    void shutdown();
 }

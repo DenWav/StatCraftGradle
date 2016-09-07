@@ -10,6 +10,7 @@
 package com.demonwav.statcraft.api
 
 import com.demonwav.statcraft.StatCraft
+import com.demonwav.statcraft.api.exceptions.StatCraftNamespaceIdNullException
 import com.demonwav.statcraft.api.exceptions.StatCraftNamespaceNotDefinedException
 import java.util.ArrayList
 import java.util.UUID
@@ -30,7 +31,8 @@ class StatCraftApi(val plugin: Any) {
      * TODO
      */
     val id: Int by lazy {
-        StatCraft.getInstance().databaseManager.getPluginId(namespace)
+        StatCraft.getInstance().databaseManager.getPluginId(namespace) ?:
+                throw StatCraftNamespaceIdNullException()
     }
 
     /**

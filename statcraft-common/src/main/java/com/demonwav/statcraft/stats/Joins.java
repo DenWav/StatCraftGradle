@@ -10,7 +10,6 @@
 package com.demonwav.statcraft.stats;
 
 import com.demonwav.statcraft.api.StatCraftStatistic;
-
 import org.jetbrains.annotations.NotNull;
 
 public class Joins extends StatCraftStatistic {

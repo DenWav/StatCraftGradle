@@ -9,6 +9,8 @@
 
 package com.demonwav.statcraft.sql
 
+import com.demonwav.statcraft.Promise
+import com.demonwav.statcraft.PromiseImpl
 import com.demonwav.statcraft.StatCraft
 import org.intellij.lang.annotations.Language
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -17,8 +19,6 @@ abstract class AbstractThreadManager : ThreadManager {
 
     private val asyncQueue = ConcurrentLinkedQueue<Runnable>()
     private val mainQueue = ConcurrentLinkedQueue<Runnable>()
-
-    abstract fun startExecutors()
 
     override fun <T> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T> {
         val promise = PromiseImpl<T>()

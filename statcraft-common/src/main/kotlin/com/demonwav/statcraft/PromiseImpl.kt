@@ -7,18 +7,18 @@
  * MIT License
  */
 
-package com.demonwav.statcraft.sql
+package com.demonwav.statcraft
 
-import com.demonwav.statcraft.StatCraft
+import java.util.function.Consumer
 
 class PromiseImpl<T> : Promise<T> {
 
-    var work: ((T?) -> Unit)? = null
+    var work: Consumer<T>? = null
 
     override fun setValue(t: T?) {
         // Don't bother executing if no work was set
         if (work != null) {
-            StatCraft.getInstance().threadManager.scheduleMain(Runnable { work?.invoke(t) })
+            StatCraft.getInstance().threadManager.scheduleMain(Runnable { work?.accept(t) })
         }
     }
 
@@ -27,7 +27,7 @@ class PromiseImpl<T> : Promise<T> {
         StatCraft.getInstance().error(message)
     }
 
-    override fun done(work: (T?) -> Unit) {
+    override fun done(work: Consumer<T>) {
         this.work = work
     }
 }

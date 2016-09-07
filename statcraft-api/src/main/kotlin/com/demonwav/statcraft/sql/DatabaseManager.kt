@@ -25,6 +25,8 @@ interface DatabaseManager : AutoCloseable {
      */
     val connection: Connection
 
+    fun initialize()
+
     /**
      * TODO
      */
@@ -63,7 +65,7 @@ interface DatabaseManager : AutoCloseable {
     /**
      * TODO
      */
-    fun executeUpdate(@Language("MySQL") query: String, vararg params: Any?): Int
+    fun executeUpdate(@Language("MySQL") query: String, vararg params: Any?): Long?
 
     /**
      * TODO
@@ -86,5 +88,5 @@ interface DatabaseManager : AutoCloseable {
     /**
      * TODO
      */
-    fun getPluginId(uuid: UUID): Int
+    fun getPluginId(uuid: UUID): Int?
 }

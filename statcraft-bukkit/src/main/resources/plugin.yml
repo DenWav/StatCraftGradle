@@ -1,5 +1,5 @@
 name: StatCraft
-main: com.demonwav.statcraft.BukkitStatCraft
+main: com.demonwav.statcraft.StatCraftPlugin
 version: @version@
 author: DemonWav
 

@@ -14,7 +14,7 @@ import org.bukkit.Bukkit
 
 class BukkitThreadManager : AbstractThreadManager() {
     override fun startExecutors() {
-        Bukkit.getServer().scheduler.runTaskTimer(BukkitStatCraft.instance, main, 1L, 1L)
-        Bukkit.getServer().scheduler.runTaskTimerAsynchronously(BukkitStatCraft.instance, async, 1L, 1L)
+        Bukkit.getServer().scheduler.runTaskTimer(BukkitStatCraft.instance.plugin, main, 1L, 1L)
+        Bukkit.getServer().scheduler.runTaskTimerAsynchronously(BukkitStatCraft.instance.plugin, async, 1L, 1L)
     }
 }

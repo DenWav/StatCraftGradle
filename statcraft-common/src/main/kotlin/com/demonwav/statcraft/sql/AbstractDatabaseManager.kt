@@ -33,7 +33,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
     private val worldMap = ConcurrentHashMap<UUID, Int>()
     private val pluginMap = ConcurrentHashMap<UUID, Int>()
 
-    fun initialize() {
+    override fun initialize() {
         try {
             val config = HikariConfig()
             config.poolName = "StatCraftDb"
@@ -254,11 +254,12 @@ abstract class AbstractDatabaseManager : DatabaseManager {
         }
     }
 
-    override fun executeUpdate(@Language("MySQL") query: String, vararg params: Any?): Int {
+    override fun executeUpdate(@Language("MySQL") query: String, vararg params: Any?): Long? {
         var statement: DbStatement? = null
         try {
             statement = query(query)
-            return statement.executeUpdate(*params)
+            statement.executeUpdate(*params)
+            return statement.lastInsertId
         } finally {
             statement?.close()
         }
@@ -266,12 +267,12 @@ abstract class AbstractDatabaseManager : DatabaseManager {
 
     override fun getPlayerId(uuid: UUID) =
         synchronized(this) {
-            if (playerMap.contains(uuid)) {
-                return@synchronized playerMap[uuid]!!
+            var result = playerMap[uuid]
+            if (result != null) {
+                return@synchronized result
             }
 
             // We don't have this UUID cached, so check the database
-            var result: Int? = null
             // byte array representation of the UUID
             val array = uuid.toByte()
             try {
@@ -283,15 +284,14 @@ abstract class AbstractDatabaseManager : DatabaseManager {
 
                     // Only add it to the database if we can actually get a player name
                     if (name != null) {
-                        executeUpdate("INSERT INTO players (uuid, name) VALUES (?, ?)", array, name)
-
-                        result = getFirstColumn("SELECT p.id FROM players p WHERE BINARY p.uuid = BINARY ?", array)
+                        result = executeUpdate("INSERT INTO players (uuid, name) VALUES (?, ?)", array, name)!!.toInt()
                     }
                 }
-            } catch (e: SQLException) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
 
+            @Suppress("SENSELESS_COMPARISON")
             if (result != null) {
                 playerMap[uuid] = result
             }
@@ -315,12 +315,12 @@ abstract class AbstractDatabaseManager : DatabaseManager {
 
     override fun getWorldId(uuid: UUID) =
         synchronized(this) {
-            if (worldMap.contains(uuid)) {
-                return@synchronized worldMap[uuid]!!
+            var result = worldMap[uuid]
+            if (result != null) {
+                return@synchronized result
             }
 
             // We don't have the UUID cached, so check the database
-            var result: Int? = null
             // byte array representation of the UUID
             val array = uuid.toByte()
             try {
@@ -332,15 +332,14 @@ abstract class AbstractDatabaseManager : DatabaseManager {
 
                     // Only add it to the database if we can actually get a world name
                     if (name != null) {
-                        executeUpdate("INSERT INTO worlds (uuid, name, custom_name) VALUES (?, ?, ?)", array, name, name)
-
-                        result = getFirstColumn("SELECT w.id FROM worlds w WHERE BINARY w.uuid = BINARY ?", array)
+                        result = executeUpdate("INSERT INTO worlds (uuid, name, custom_name) VALUES (?, ?, ?)", array, name, name)!!.toInt()
                     }
                 }
-            } catch (e: SQLException) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
 
+            @Suppress("SENSELESS_COMPARISON")
             if (result != null) {
                 playerMap[uuid] = result
             }
@@ -359,29 +358,31 @@ abstract class AbstractDatabaseManager : DatabaseManager {
 
     override fun getPluginId(uuid: UUID) =
         synchronized(this) {
-            if (pluginMap.contains(uuid)) {
-                return@synchronized pluginMap[uuid]!!
+            var result = pluginMap[uuid]
+            if (result != null) {
+                return@synchronized result
             }
 
             // We don't have the UUID cached, so check the database
-            var result: Int?
             // byte array representation of hte UUID
             val array = uuid.toByte()
-
-            result = getFirstColumn("SELECT n.id FROM namespace n WHERE BINARY n.uuid = BINARY ?", array)
-
-            if (result == null) {
-                // This uuid isn't in the database yet, so add it
-                executeUpdate("INSERT INTO namespace (uuid) VALUES (?)", array)
-
+            try {
                 result = getFirstColumn("SELECT n.id FROM namespace n WHERE BINARY n.uuid = BINARY ?", array)
+
+                if (result == null) {
+                    // This uuid isn't in the database yet, so add it
+                    result = executeUpdate("INSERT INTO namespace (uuid) VALUES (?)", array)!!.toInt()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
+            @Suppress("SENSELESS_COMPARISON")
             if (result != null) {
                 pluginMap[uuid] = result
             }
 
-            return@synchronized result!!
+            return@synchronized result
         }
 
     override val connection: Connection

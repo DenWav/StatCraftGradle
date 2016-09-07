@@ -9,7 +9,7 @@
 
 package com.demonwav.statcraft.commands
 
-import java.util.*
+import java.util.TreeMap
 
 class BukkitBaseCommand : AbstractBaseCommand() {
     override val subCommands: TreeMap<String, StatCraftTemplate>

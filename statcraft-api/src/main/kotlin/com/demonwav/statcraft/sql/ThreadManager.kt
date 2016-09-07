@@ -9,12 +9,18 @@
 
 package com.demonwav.statcraft.sql
 
+import com.demonwav.statcraft.Promise
 import org.intellij.lang.annotations.Language
 
 /**
  * TODO
  */
 interface ThreadManager : AutoCloseable {
+
+    /**
+     * TODO
+     */
+    fun startExecutors()
 
     /**
      * TODO

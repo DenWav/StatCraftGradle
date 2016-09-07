@@ -7,25 +7,25 @@
  * MIT License
  */
 
-package com.demonwav.statcraft.sql
+package com.demonwav.statcraft
 
 /**
  * TODO
  */
-interface Promise<T> {
+interface MoveUpdater<in P, in W> : Runnable {
 
     /**
      * TODO
      */
-    fun setValue(t: T?)
+    override fun run()
 
     /**
      * TODO
      */
-    fun setError(message: String)
+    fun run(player: P)
 
     /**
      * TODO
      */
-    fun done(work: (T?) -> Unit)
+    fun run(player: P, world: W)
 }

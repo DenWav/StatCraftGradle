@@ -11,7 +11,6 @@ package com.demonwav.statcraft.stats;
 
 import com.demonwav.statcraft.api.StatCraftStatistic;
 import com.demonwav.statcraft.api.StatCraftStatisticType;
-
 import org.jetbrains.annotations.NotNull;
 
 public class Deaths extends StatCraftStatistic {

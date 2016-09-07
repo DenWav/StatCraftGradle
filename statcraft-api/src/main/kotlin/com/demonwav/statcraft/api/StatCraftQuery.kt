@@ -9,11 +9,9 @@
 
 package com.demonwav.statcraft.api
 
+import com.demonwav.statcraft.Promise
 import com.demonwav.statcraft.StatCraft
-import com.demonwav.statcraft.api.exceptions.StatCraftStatisticTypeNotDefined
-import com.demonwav.statcraft.sql.Promise
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.util.UUID
 
 /**
@@ -125,8 +123,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player),
-            StatCraft.getInstance().databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return,
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return,
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -198,8 +196,8 @@ class StatCraftQuery(
             value,
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player),
-            StatCraft.getInstance().databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return,
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return,
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -245,8 +243,8 @@ class StatCraftQuery(
             value,
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player),
-            StatCraft.getInstance().databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return,
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return,
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -293,8 +291,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player),
-            StatCraft.getInstance().databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return,
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return,
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -341,8 +339,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player),
-            StatCraft.getInstance().databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return Promise.EMPTY_PROMISE(),
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return Promise.EMPTY_PROMISE(),
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -368,8 +366,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player),
-            StatCraft.getInstance().databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return Promise.EMPTY_PROMISE(),
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return Promise.EMPTY_PROMISE(),
             primaryType.index,
             secondaryType.index
         )
@@ -394,8 +392,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player),
-            StatCraft.getInstance().databaseManager.getWorldId(world),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return Promise.EMPTY_PROMISE(),
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return Promise.EMPTY_PROMISE(),
             primaryType.index,
             secondaryType.index,
             primaryTarget
