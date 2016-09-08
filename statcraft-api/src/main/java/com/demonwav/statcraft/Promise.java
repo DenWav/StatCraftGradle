@@ -45,7 +45,7 @@ public interface Promise<T> {
 
     /**
      * Provide the {@link Consumer} which should be run on the main thread with the result once the promise has been
-     * fulfilled, or an empty optional in the case of an {@code emtpy promise}.
+     * fulfilled, or an empty optional in the case of an {@code empty promise}.
      *
      * @param work The {@link Consumer} to be run on the main thread.
      */
