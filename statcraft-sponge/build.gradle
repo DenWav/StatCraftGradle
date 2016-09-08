@@ -28,9 +28,6 @@ shadowJar {
         exclude(dependency("com.google.guava::"))
         // hocon
         exclude(dependency("com.typesafe::"))
-        // yaml
-        exclude(dependency("org.yaml::"))
-
 
         // Sponge provides org.slf4j, which is included as well in HikariCP, so exclude it from the jar
         exclude(dependency("org.slf4j::"))

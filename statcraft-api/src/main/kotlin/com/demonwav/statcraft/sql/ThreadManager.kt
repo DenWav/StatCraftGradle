@@ -30,7 +30,7 @@ interface ThreadManager : AutoCloseable {
     /**
      * TODO
      */
-    fun <T> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T>
+    fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T>
 
     /**
      * TODO

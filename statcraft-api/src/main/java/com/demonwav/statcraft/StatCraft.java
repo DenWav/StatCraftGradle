@@ -172,6 +172,8 @@ public interface StatCraft {
     /**
      * Print an {@code info} message as StatCraft using the current StatCraft logger instance. This method exists
      * because Bukkit and Sponge use different {@code Logger} instances.
+     * <p>
+     * The given String should never be null.
      *
      * @param s The message to log at log level {@code info}.
      */
@@ -180,6 +182,8 @@ public interface StatCraft {
     /**
      * Print an {@code warn} message as StatCraft using the current StatCraft logger instance. This method exists
      * because Bukkit and Sponge use different {@code Logger} instances.
+     * <p>
+     * The given String should never be null.
      *
      * @param s The message to log at log level {@code warn}.
      */
@@ -188,6 +192,8 @@ public interface StatCraft {
     /**
      * Print an {@code error} message as StatCraft using the current StatCraft logger instance. This method exists
      * because Bukkit and Sponge use different {@code Logger} instances.
+     * <p>
+     * The given String should never be null.
      *
      * @param s The message to log at log level {@code error}.
      */
@@ -213,6 +219,10 @@ public interface StatCraft {
      * @param plugin The object annotated with {@link com.demonwav.statcraft.api.StatCraftNamespace StatCraftNamespace}
      *               which defines a plugin that is implementing the StatCraft API.
      * @return The {@link StatCraftApi} instance that corresponds with the given plugin.
+     * @throws com.demonwav.statcraft.api.exceptions.StatCraftNamespaceAlreadyDefinedException when a given namespace
+     *         UUID is provided for a different object that has already been defined with the same UUID.
+     * @throws com.demonwav.statcraft.api.exceptions.StatCraftNamespaceNotDefinedException when a given object is
+     *         provided without a {@link com.demonwav.statcraft.api.StatCraftNamespace StatCraftNamespace} annotation.
      */
     @NotNull
     StatCraftApi getApi(@NotNull Object plugin);

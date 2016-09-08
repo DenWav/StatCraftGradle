@@ -20,7 +20,7 @@ abstract class AbstractThreadManager : ThreadManager {
     private val asyncQueue = ConcurrentLinkedQueue<Runnable>()
     private val mainQueue = ConcurrentLinkedQueue<Runnable>()
 
-    override fun <T> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T> {
+    override fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T> {
         val promise = PromiseImpl<T>()
         scheduleAsync(Runnable {
             promise.setValue(StatCraft.getInstance().databaseManager.getFirstColumn<T>(query, *params))
@@ -52,7 +52,7 @@ abstract class AbstractThreadManager : ThreadManager {
     }
 
     internal inner abstract class WorkingRunnable : Runnable {
-        abstract fun getQueue(): ConcurrentLinkedQueue<Runnable>
+        internal abstract fun getQueue(): ConcurrentLinkedQueue<Runnable>
 
         override fun run() {
             var runnable = getQueue().poll()

@@ -9,25 +9,28 @@
 
 package com.demonwav.statcraft
 
+import java.util.Optional
 import java.util.function.Consumer
 
-class PromiseImpl<T> : Promise<T> {
+class PromiseImpl<T : Any> : Promise<T> {
 
-    var work: Consumer<T>? = null
+    var work: Consumer<Optional<T>>? = null
 
     override fun setValue(t: T?) {
         // Don't bother executing if no work was set
         if (work != null) {
-            StatCraft.getInstance().threadManager.scheduleMain(Runnable { work?.accept(t) })
+            StatCraft.getInstance().threadManager.scheduleMain(Runnable { work?.accept(Optional.of(t)) })
         }
     }
 
     override fun setError(message: String) {
-        work = null
         StatCraft.getInstance().error(message)
+        if (work != null) {
+            StatCraft.getInstance().threadManager.scheduleMain(Runnable { work?.accept(Optional.empty()) })
+        }
     }
 
-    override fun done(work: Consumer<T>) {
+    override fun done(work: Consumer<Optional<T>>) {
         this.work = work
     }
 }
