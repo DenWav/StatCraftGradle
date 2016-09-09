@@ -9,7 +9,10 @@
 
 package com.demonwav.statcraft.api.exceptions
 
+import com.demonwav.statcraft.api.StatCraftNamespace
+
 /**
- * TODO
+ * Thrown when the database is unable to retrieve or create an integer ID for a [StatCraftNamespace]. This should generally never happen...
+ * at least in a perfect world, anyways.
  */
 class StatCraftNamespaceIdNullException : RuntimeException()

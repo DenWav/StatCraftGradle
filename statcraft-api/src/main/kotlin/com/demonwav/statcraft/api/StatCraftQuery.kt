@@ -11,6 +11,7 @@ package com.demonwav.statcraft.api
 
 import com.demonwav.statcraft.Promise
 import com.demonwav.statcraft.StatCraft
+import com.demonwav.statcraft.api.exceptions.StatCraftStatisticTypeNotDefined
 import java.math.BigDecimal
 import java.util.UUID
 
@@ -27,11 +28,19 @@ class StatCraftQuery(
     private var secondaryType: StatCraftStatisticType = StatCraftApi.UNIT_TYPE
 
     fun primaryType(primaryType: StatCraftStatisticType): StatCraftQuery {
+        if (!statistic.primaryStatTypes.contains(primaryType)) {
+            throw StatCraftStatisticTypeNotDefined()
+        }
+
         this.primaryType = primaryType
         return this
     }
 
     fun secondaryType(secondaryType: StatCraftStatisticType): StatCraftQuery {
+        if (!statistic.secondaryStatTypes.contains(secondaryType)) {
+            throw StatCraftStatisticTypeNotDefined()
+        }
+
         this.secondaryType = secondaryType
         return this
     }

@@ -25,6 +25,9 @@ interface DatabaseManager : AutoCloseable {
      */
     val connection: Connection
 
+    /**
+     * TODO
+     */
     fun initialize()
 
     /**

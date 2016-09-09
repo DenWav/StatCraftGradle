@@ -9,7 +9,12 @@
 
 package com.demonwav.statcraft.api.exceptions
 
+import com.demonwav.statcraft.api.StatCraftApi
+import com.demonwav.statcraft.api.StatCraftNamespace
+import com.demonwav.statcraft.StatCraft
+
 /**
- * TODO
+ * This exception is thrown when a [StatCraftApi] has already been created using the same [StatCraftNamespace].
+ * @see StatCraft.getApi
  */
 class StatCraftNamespaceAlreadyDefinedException : RuntimeException()

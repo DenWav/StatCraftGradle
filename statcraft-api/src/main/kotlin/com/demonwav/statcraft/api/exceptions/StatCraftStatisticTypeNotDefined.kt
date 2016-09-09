@@ -9,7 +9,10 @@
 
 package com.demonwav.statcraft.api.exceptions
 
+import com.demonwav.statcraft.api.StatCraftQuery
+import com.demonwav.statcraft.api.StatCraftStatistic
+
 /**
- * TODO
+ * Thrown when a stat type is attempted to be set on a [StatCraftQuery] that the underlying [StatCraftStatistic] does not contain.
  */
 class StatCraftStatisticTypeNotDefined : RuntimeException()
