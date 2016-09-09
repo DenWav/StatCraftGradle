@@ -22,8 +22,7 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.util.ArrayList
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 abstract class AbstractDatabaseManager : DatabaseManager {
@@ -231,7 +230,7 @@ abstract class AbstractDatabaseManager : DatabaseManager {
         }
     }
 
-    override fun <T> getFirstColumnResults(@Language("MySQL") query: String, vararg params: Any?): List<T>? {
+    override fun <T> getFirstColumnResults(@Language("MySQL") query: String, vararg params: Any?): List<T> {
         val dbRows = ArrayList<T>()
         var result: T?
         query(query).execute(*params).use {
@@ -244,11 +243,11 @@ abstract class AbstractDatabaseManager : DatabaseManager {
         return dbRows
     }
 
-    override fun getResults(@Language("MySQL") query: String, vararg params: Any?): List<DbRow>? {
+    override fun getResults(@Language("MySQL") query: String, vararg params: Any?): List<DbRow> {
         var statement: DbStatement? = null
         try {
             statement = query(query).execute(*params)
-            return statement.results
+            return statement.results ?: Collections.emptyList()
         } finally {
             statement?.close()
         }
