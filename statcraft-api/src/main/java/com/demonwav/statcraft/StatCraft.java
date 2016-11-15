@@ -15,6 +15,7 @@ import com.demonwav.statcraft.config.Config;
 import com.demonwav.statcraft.sql.DatabaseManager;
 import com.demonwav.statcraft.sql.ThreadManager;
 
+import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +35,8 @@ import java.util.UUID;
  * in Bukkit, or is annotated with {@code @Plugin} in Sponge are different objects.
  */
 public interface StatCraft {
+
+    String CHAIN = "statcraft_shared_chain";
 
     /**
      * Retrieve the current global StatCraft instance. This is a direct variable access method, so it is not expensive
@@ -73,6 +76,16 @@ public interface StatCraft {
      */
     @NotNull
     TaskChainFactory getTaskChain();
+
+    /**
+     * A short-hand method for {@code getInstance().getTaskChain().newSharedChain(CHAIN)}.
+     *
+     * @return a new shared task chain.
+     */
+    @NotNull
+    static TaskChain<?> newSharedChain() {
+        return getInstance().getTaskChain().newSharedChain(CHAIN);
+    }
 
     /**
      * Retrieve the current global {@link BaseCommand} instance.

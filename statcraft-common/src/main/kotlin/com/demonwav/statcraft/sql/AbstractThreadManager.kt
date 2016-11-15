@@ -16,11 +16,9 @@ import java.util.concurrent.TimeUnit
 
 abstract class AbstractThreadManager : ThreadManager {
 
-    private val CHAIN = "statcraft_shared_chain"
-
     override fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): CompletableFuture<T> {
         val future = CompletableFuture<T>()
-        StatCraft.getInstance().taskChain.newSharedChain<T>(CHAIN)
+        StatCraft.newSharedChain()
             .asyncFirst { StatCraft.getInstance().databaseManager.getFirstColumn<T>(query, *params) }
             .sync { result -> future.complete(result) }
             .execute()
@@ -28,17 +26,17 @@ abstract class AbstractThreadManager : ThreadManager {
     }
 
     override fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?) {
-        StatCraft.getInstance().taskChain.newSharedChain<Any>(CHAIN)
+        StatCraft.newSharedChain()
             .async { -> StatCraft.getInstance().databaseManager.executeUpdate(query, *params) }
     }
 
     override fun scheduleAsync(runnable: Runnable) {
-        StatCraft.getInstance().taskChain.newSharedChain<Any>(CHAIN)
+        StatCraft.newSharedChain()
             .async(runnable::run)
     }
 
     override fun scheduleMain(runnable: Runnable) {
-        StatCraft.getInstance().taskChain.newSharedChain<Any>(CHAIN)
+        StatCraft.newSharedChain()
             .sync(runnable::run)
     }
 
