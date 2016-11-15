@@ -9,12 +9,14 @@
 
 package com.demonwav.statcraft.api
 
-import com.demonwav.statcraft.Promise
+import com.demonwav.statcraft.ExceptionalFuture
 import com.demonwav.statcraft.StatCraft
 import com.demonwav.statcraft.api.exceptions.StatCraftStatisticTypeNotDefined
 import java.math.BigDecimal
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
+private const val EMPTY_STRING = ""
 /**
  * TODO
  */
@@ -317,21 +319,21 @@ class StatCraftQuery(
     /**
      * TODO
      */
-    fun getValue(player: UUID, world: UUID): Promise<Long> {
+    fun getValue(player: UUID, world: UUID): CompletableFuture<Long> {
         return getValue(player, world, EMPTY_STRING)
     }
 
     /**
      * TODO
      */
-    fun getValue(player: UUID, world: UUID, primaryTarget: String): Promise<Long> {
+    fun getValue(player: UUID, world: UUID, primaryTarget: String): CompletableFuture<Long> {
         return getValue(player, world, primaryTarget, EMPTY_STRING)
     }
 
     /**
      * TODO
      */
-    fun getValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String): Promise<Long> {
+    fun getValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String): CompletableFuture<Long> {
         return StatCraft.getInstance().threadManager.scheduleQuery<Long>(
             //language=MySQL
             """
@@ -348,8 +350,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return Promise.EMPTY_PROMISE(),
-            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return Promise.EMPTY_PROMISE(),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return ExceptionalFuture.create(Exception("Failed to get player id")),
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return ExceptionalFuture.create(Exception("Failed to get world id")),
             primaryType.index,
             secondaryType.index,
             primaryTarget,
@@ -360,7 +362,7 @@ class StatCraftQuery(
     /**
      * TODO
      */
-    fun getSum(player: UUID, world: UUID): Promise<BigDecimal> {
+    fun getSum(player: UUID, world: UUID): CompletableFuture<BigDecimal> {
         return StatCraft.getInstance().threadManager.scheduleQuery<BigDecimal>(
             //language=MySQL
             """
@@ -375,8 +377,8 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return Promise.EMPTY_PROMISE(),
-            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return Promise.EMPTY_PROMISE(),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return ExceptionalFuture.create(Exception("Failed to get player id")),
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return ExceptionalFuture.create(Exception("Failed to get world id")),
             primaryType.index,
             secondaryType.index
         )
@@ -385,7 +387,7 @@ class StatCraftQuery(
     /**
      * TODO
      */
-    fun getSum(player: UUID, world: UUID, primaryTarget: String): Promise<BigDecimal> {
+    fun getSum(player: UUID, world: UUID, primaryTarget: String): CompletableFuture<BigDecimal> {
         return StatCraft.getInstance().threadManager.scheduleQuery<BigDecimal>(
             //language=MySQL
             """
@@ -401,16 +403,12 @@ class StatCraftQuery(
 
             statistic.api.id,
             statistic.index,
-            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return Promise.EMPTY_PROMISE(),
-            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return Promise.EMPTY_PROMISE(),
+            StatCraft.getInstance().databaseManager.getPlayerId(player) ?: return ExceptionalFuture.create(Exception("Failed to get player id")),
+            StatCraft.getInstance().databaseManager.getWorldId(world) ?: return ExceptionalFuture.create(Exception("Failed to get world id")),
             primaryType.index,
             secondaryType.index,
             primaryTarget
         )
     }
 
-    companion object {
-        @JvmStatic
-        private val EMPTY_STRING = ""
-    }
 }

@@ -9,69 +9,40 @@
 
 package com.demonwav.statcraft.sql
 
-import com.demonwav.statcraft.Promise
-import com.demonwav.statcraft.PromiseImpl
 import com.demonwav.statcraft.StatCraft
 import org.intellij.lang.annotations.Language
-import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 abstract class AbstractThreadManager : ThreadManager {
 
-    private val asyncQueue = ConcurrentLinkedQueue<Runnable>()
-    private val mainQueue = ConcurrentLinkedQueue<Runnable>()
+    private val CHAIN = "statcraft_shared_chain"
 
-    override fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T> {
-        val promise = PromiseImpl<T>()
-        scheduleAsync(Runnable {
-            promise.setValue(StatCraft.getInstance().databaseManager.getFirstColumn<T>(query, *params))
-        })
-        return promise
+    override fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): CompletableFuture<T> {
+        val future = CompletableFuture<T>()
+        StatCraft.getInstance().taskChain.newSharedChain<T>(CHAIN)
+            .asyncFirst { StatCraft.getInstance().databaseManager.getFirstColumn<T>(query, *params) }
+            .sync { result -> future.complete(result) }
+            .execute()
+        return future
     }
 
     override fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?) {
-        scheduleAsync(Runnable {
-            StatCraft.getInstance().databaseManager.executeUpdate(query, *params)
-        })
+        StatCraft.getInstance().taskChain.newSharedChain<Any>(CHAIN)
+            .async { -> StatCraft.getInstance().databaseManager.executeUpdate(query, *params) }
     }
 
     override fun scheduleAsync(runnable: Runnable) {
-        asyncQueue.offer(runnable)
+        StatCraft.getInstance().taskChain.newSharedChain<Any>(CHAIN)
+            .async(runnable::run)
     }
 
     override fun scheduleMain(runnable: Runnable) {
-        mainQueue.offer(runnable)
+        StatCraft.getInstance().taskChain.newSharedChain<Any>(CHAIN)
+            .sync(runnable::run)
     }
-
-    override val async: Runnable = Async()
-    override val main: Runnable = Main()
 
     override fun close() {
-        // Do all work that's left immediately
-        async.run()
-        main.run()
-    }
-
-    internal inner abstract class WorkingRunnable : Runnable {
-        internal abstract fun getQueue(): ConcurrentLinkedQueue<Runnable>
-
-        override fun run() {
-            var runnable = getQueue().poll()
-            while (runnable != null) {
-                try {
-                    runnable.run()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                runnable = getQueue().poll()
-            }
-        }
-    }
-
-    internal inner class Async : WorkingRunnable() {
-        override fun getQueue() = asyncQueue
-    }
-
-    internal inner class Main : WorkingRunnable() {
-        override fun getQueue() = mainQueue
+        StatCraft.getInstance().taskChain.shutdown(20, TimeUnit.MILLISECONDS)
     }
 }

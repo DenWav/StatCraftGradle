@@ -15,6 +15,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "ninja.leaping.configurate:configurate-core:$configurate_version"
     compile 'com.intellij:annotations:12.0'
+    compile "co.aikar:taskchain-core:$taskchain_version"
 }
 
 shadowJar {

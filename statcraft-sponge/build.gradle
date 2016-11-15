@@ -18,6 +18,7 @@ repositories {
 dependencies {
     compile project(":statcraft-common")
     compileOnly "org.spongepowered:spongeapi:5.0.0-SNAPSHOT"
+    compile "co.aikar:taskchain-sponge:$taskchain_version"
 }
 
 shadowJar {

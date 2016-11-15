@@ -9,8 +9,8 @@
 
 package com.demonwav.statcraft.api.exceptions
 
-import com.demonwav.statcraft.api.StatCraftNamespace
 import com.demonwav.statcraft.StatCraft
+import com.demonwav.statcraft.api.StatCraftNamespace
 
 /**
  * Thrown when [StatCraft.getApi] is called with an object that isn't annotated with [StatCraftNamespace].

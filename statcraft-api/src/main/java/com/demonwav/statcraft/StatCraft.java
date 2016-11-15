@@ -14,6 +14,8 @@ import com.demonwav.statcraft.commands.BaseCommand;
 import com.demonwav.statcraft.config.Config;
 import com.demonwav.statcraft.sql.DatabaseManager;
 import com.demonwav.statcraft.sql.ThreadManager;
+
+import co.aikar.taskchain.TaskChainFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,6 +65,14 @@ public interface StatCraft {
      */
     @NotNull
     ThreadManager getThreadManager();
+
+    /**
+     * Retrieve the current global {@link TaskChainFactory} instance.
+     *
+     * @return The current global {@link TaskChainFactory} instance.
+     */
+    @NotNull
+    TaskChainFactory getTaskChain();
 
     /**
      * Retrieve the current global {@link BaseCommand} instance.

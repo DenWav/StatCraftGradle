@@ -19,6 +19,7 @@ repositories {
 dependencies {
     compile project(":statcraft-common")
     compileOnly "org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT"
+    compile "co.aikar:taskchain-bukkit:$taskchain_version"
 }
 
 processResources {

@@ -17,7 +17,6 @@ import org.spongepowered.api.event.game.state.GamePostInitializationEvent
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent
 import org.spongepowered.api.event.game.state.GameStoppingEvent
 import org.spongepowered.api.plugin.Plugin
-import java.io.File
 import java.nio.file.Path
 
 @Plugin(

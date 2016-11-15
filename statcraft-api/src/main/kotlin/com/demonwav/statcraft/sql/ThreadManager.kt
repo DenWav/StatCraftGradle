@@ -9,8 +9,8 @@
 
 package com.demonwav.statcraft.sql
 
-import com.demonwav.statcraft.Promise
 import org.intellij.lang.annotations.Language
+import java.util.concurrent.CompletableFuture
 
 /**
  * TODO
@@ -30,7 +30,7 @@ interface ThreadManager : AutoCloseable {
     /**
      * TODO
      */
-    fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): Promise<T>
+    fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): CompletableFuture<T>
 
     /**
      * TODO

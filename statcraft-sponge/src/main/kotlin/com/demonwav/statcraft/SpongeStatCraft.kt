@@ -26,6 +26,7 @@ class SpongeStatCraft(val plugin: StatCraftPlugin) : AbstractStatCraft() {
 
     private val databaseManager = SpongeDatabaseManager()
     private val threadManager = SpongeThreadManager()
+    private val taskChainFactory = SpongeTaskChainFactory.create(plugin)!!
     private val baseCommand = SpongeBaseCommand()
     private val moveUpdater = SpongeMoveUpdater()
 
@@ -59,6 +60,7 @@ class SpongeStatCraft(val plugin: StatCraftPlugin) : AbstractStatCraft() {
 
     override fun getDatabaseManager() = databaseManager
     override fun getThreadManager() = threadManager
+    override fun getTaskChain() = taskChainFactory
     override fun getBaseCommand() = baseCommand
     override fun getMoveUpdater() = moveUpdater
 

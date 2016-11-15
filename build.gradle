@@ -8,8 +8,9 @@
  */
 
 buildscript {
-    ext.kotlin_version = "1.0.3"
+    ext.kotlin_version = "1.0.4"
     ext.configurate_version = "3.1.1"
+    ext.taskchain_version = "3.4.3"
 
     repositories {
         mavenCentral()
@@ -37,6 +38,9 @@ subprojects {
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url = "http://ci.emc.gs/nexus/content/groups/aikar/"
+        }
     }
 
     shadowJar {
