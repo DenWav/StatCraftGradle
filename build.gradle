@@ -39,7 +39,7 @@ subprojects {
         mavenCentral()
         jcenter()
         maven {
-            url = "http://ci.emc.gs/nexus/content/groups/aikar/"
+            url = "https://ci.emc.gs/nexus/content/groups/aikar/"
         }
     }
 
