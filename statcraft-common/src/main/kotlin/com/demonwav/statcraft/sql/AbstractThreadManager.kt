@@ -28,16 +28,19 @@ abstract class AbstractThreadManager : ThreadManager {
     override fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?) {
         StatCraft.newSharedChain()
             .async { -> StatCraft.getInstance().databaseManager.executeUpdate(query, *params) }
+            .execute()
     }
 
     override fun scheduleAsync(runnable: Runnable) {
         StatCraft.newSharedChain()
             .async(runnable::run)
+            .execute()
     }
 
     override fun scheduleMain(runnable: Runnable) {
         StatCraft.newSharedChain()
             .sync(runnable::run)
+            .execute()
     }
 
     override fun close() {
