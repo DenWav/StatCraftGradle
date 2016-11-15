@@ -20,11 +20,6 @@ interface ThreadManager : AutoCloseable {
     /**
      * TODO
      */
-    fun startExecutors()
-
-    /**
-     * TODO
-     */
     fun shutdown()
 
     /**
@@ -36,23 +31,4 @@ interface ThreadManager : AutoCloseable {
      * TODO
      */
     fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?)
-
-    /**
-     * TODO
-     */
-    fun scheduleAsync(runnable: Runnable)
-
-    /**
-     * TODO
-     */
-    fun scheduleMain(runnable: Runnable)
-
-    /**
-     * TODO
-     */
-    val async: Runnable
-    /**
-     * TODO
-     */
-    val main: Runnable
 }

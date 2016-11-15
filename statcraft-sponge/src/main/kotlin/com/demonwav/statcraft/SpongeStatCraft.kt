@@ -9,6 +9,7 @@
 
 package com.demonwav.statcraft
 
+import co.aikar.taskchain.SpongeTaskChainFactory
 import com.demonwav.statcraft.api.StatCraftNamespace
 import com.demonwav.statcraft.commands.SpongeBaseCommand
 import com.demonwav.statcraft.listeners.BlockListener

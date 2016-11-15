@@ -65,7 +65,7 @@ abstract class AbstractStatCraft : StatCraft {
     protected lateinit var api: StatCraftApi
 
     fun preInit() {
-        val loader = HoconConfigurationLoader.builder().setPath(getConfigFile()).build()
+        val loader = HoconConfigurationLoader.builder().setPath(configFile).build()
         val configMapper = ObjectMapper.forClass(Config::class.java).bindToNew()
 
         // Load config
@@ -97,8 +97,6 @@ abstract class AbstractStatCraft : StatCraft {
         if (!statConfig.timezone.equals("auto", true)) {
             timeZone = statConfig.timezone
         }
-
-        threadManager.startExecutors()
 
         createListeners()
         createCommands()

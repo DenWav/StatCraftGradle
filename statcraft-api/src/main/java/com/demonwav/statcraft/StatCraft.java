@@ -88,6 +88,16 @@ public interface StatCraft {
     }
 
     /**
+     * Short-ahnd method for {@code getInstance().getTaskChain().newChain()}.
+     *
+     * @return a new task chain.
+     */
+    @NotNull
+    static TaskChain<?> newChain() {
+        return getInstance().getTaskChain().newChain();
+    }
+
+    /**
      * Retrieve the current global {@link BaseCommand} instance.
      *
      * @return The current global {@link BaseCommand} instance.

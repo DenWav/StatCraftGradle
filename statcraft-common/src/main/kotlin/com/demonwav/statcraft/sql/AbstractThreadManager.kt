@@ -18,7 +18,7 @@ abstract class AbstractThreadManager : ThreadManager {
 
     override fun <T : Any> scheduleQuery(@Language("MySQL") query: String, vararg params: Any?): CompletableFuture<T> {
         val future = CompletableFuture<T>()
-        StatCraft.newSharedChain()
+        StatCraft.newChain()
             .asyncFirst { StatCraft.getInstance().databaseManager.getFirstColumn<T>(query, *params) }
             .sync { result -> future.complete(result) }
             .execute()
@@ -26,20 +26,8 @@ abstract class AbstractThreadManager : ThreadManager {
     }
 
     override fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?) {
-        StatCraft.newSharedChain()
+        StatCraft.newChain()
             .async { -> StatCraft.getInstance().databaseManager.executeUpdate(query, *params) }
-            .execute()
-    }
-
-    override fun scheduleAsync(runnable: Runnable) {
-        StatCraft.newSharedChain()
-            .async(runnable::run)
-            .execute()
-    }
-
-    override fun scheduleMain(runnable: Runnable) {
-        StatCraft.newSharedChain()
-            .sync(runnable::run)
             .execute()
     }
 
