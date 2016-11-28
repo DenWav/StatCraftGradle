@@ -27,7 +27,7 @@ abstract class AbstractThreadManager : ThreadManager {
 
     override fun scheduleUpdate(@Language("MySQL") query: String, vararg params: Any?) {
         StatCraft.newChain()
-            .async { -> StatCraft.getInstance().databaseManager.executeUpdate(query, *params) }
+            .async() { -> StatCraft.getInstance().databaseManager.executeUpdate(query, *params) }
             .execute()
     }
 
