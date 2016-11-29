@@ -10,7 +10,7 @@
 package com.demonwav.statcraft.api
 
 /**
- * TODO
+ * Subtype for the [StatCraftStatistic].
  */
 interface StatCraftStatisticType {
 

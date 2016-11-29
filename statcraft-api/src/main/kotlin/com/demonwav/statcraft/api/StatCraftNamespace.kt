@@ -10,7 +10,7 @@
 package com.demonwav.statcraft.api
 
 /**
- * TODO
+ * Annotation which defines the UUID of the StatCraft plugin.
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)

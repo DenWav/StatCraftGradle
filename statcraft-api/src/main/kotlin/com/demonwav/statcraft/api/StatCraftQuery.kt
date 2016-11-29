@@ -18,11 +18,11 @@ import java.util.concurrent.CompletableFuture
 
 private const val EMPTY_STRING = ""
 /**
- * TODO
+ * The query builder which accepts primary and secondary types, and allows modifying or reading data for the statistic types.
  */
 class StatCraftQuery(
     /**
-     * TODO
+     * The [StatCraftStatistic] which created this query object.
      */
     private val statistic: StatCraftStatistic
 ) {
@@ -51,21 +51,21 @@ class StatCraftQuery(
     // Increment
     // ***************************
     /**
-     * TODO
+     * Add one to the value with no primary or secondary types.
      */
     fun incrementValue(player: UUID, world: UUID) {
         incrementValue(player, world, EMPTY_STRING)
     }
 
     /**
-     * TODO
+     * Add one to the value with no secondary type.
      */
     fun incrementValue(player: UUID, world: UUID, primaryTarget: String) {
         incrementValue(player, world, primaryTarget, EMPTY_STRING)
     }
 
     /**
-     * TODO
+     * Add one to the value.
      */
     fun incrementValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String) {
         addValue(player, world, primaryTarget, secondaryTarget, 1)
@@ -75,21 +75,21 @@ class StatCraftQuery(
     // Decrement
     // ***************************
     /**
-     * TODO
+     * Subtract one from the value with no primary or secondary types.
      */
     fun decrementValue(player: UUID, world: UUID) {
         decrementValue(player, world, EMPTY_STRING)
     }
 
     /**
-     * TODO
+     * Subtract one from the value with no secondary type.
      */
     fun decrementValue(player: UUID, world: UUID, primaryTarget: String) {
         decrementValue(player, world, primaryTarget, EMPTY_STRING)
     }
 
     /**
-     * TODO
+     * Subtract one from the value.
      */
     fun decrementValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String) {
         subtractValue(player, world, primaryTarget, secondaryTarget, 1)
@@ -99,21 +99,21 @@ class StatCraftQuery(
     // Add Value
     // ***************************
     /**
-     * TODO
+     * Add the given number to the value with no primary or secondary types.
      */
     fun addValue(player: UUID, world: UUID, value: Long) {
         addValue(player, world, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Add the given number to the value with no secondary type.
      */
     fun addValue(player: UUID, world: UUID, primaryTarget: String, value: Long) {
         addValue(player, world, primaryTarget, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Add the given number to the value.
      */
     fun addValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
         StatCraft.getInstance().threadManager.scheduleUpdate(
@@ -149,21 +149,21 @@ class StatCraftQuery(
     // Subtract Value
     // ***************************
     /**
-     * TODO
+     * Subtract the given number from the value with no primary or secondary types.
      */
     fun subtractValue(player: UUID, world: UUID, value: Long) {
         subtractValue(player, world, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Subtract the given number from the value with no secondary type.
      */
     fun subtractValue(player: UUID, world: UUID, primaryTarget: String, value: Long) {
         subtractValue(player, world, primaryTarget, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Subtract the given number from the value.
      */
     fun subtractValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
         addValue(player, world, primaryTarget, secondaryTarget, -1 * value)
@@ -173,21 +173,21 @@ class StatCraftQuery(
     // Multiply Value
     // ***************************
     /**
-     * TODO
+     * Multiply the value by the give number with no primary or secondary types.
      */
     fun multiplyValue(player: UUID, world: UUID, value: Long) {
         multiplyValue(player, world, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Multiply the value by the given number with no secondary type.
      */
     fun multiplyValue(player: UUID, world: UUID, primaryTarget: String, value: Long) {
         multiplyValue(player, world, primaryTarget, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Multiply the value by the given number.
      */
     fun multiplyValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
         StatCraft.getInstance().threadManager.scheduleUpdate(
@@ -220,21 +220,21 @@ class StatCraftQuery(
     // Divide Value
     // ***************************
     /**
-     * TODO
+     * Divide the value by the given number with no primary or secondary types.
      */
     fun divideValue(player: UUID, world: UUID, value: Long) {
         divideValue(player, world, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Divide the value by the given number with no secondary type.
      */
     fun divideValue(player: UUID, world: UUID, primaryTarget: String, value: Long) {
         divideValue(player, world, primaryTarget, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Divide the value by the given number.
      */
     fun divideValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
         StatCraft.getInstance().threadManager.scheduleUpdate(
@@ -267,21 +267,21 @@ class StatCraftQuery(
     // Set Value
     // ***************************
     /**
-     * TODO
+     * Set the value with no primary or secondary types.
      */
     fun setValue(player: UUID, world: UUID, value: Long) {
         setValue(player, world, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Set the value with no secondary type.
      */
     fun setValue(player: UUID, world: UUID, primaryTarget: String, value: Long) {
         setValue(player, world, primaryTarget, EMPTY_STRING, value)
     }
 
     /**
-     * TODO
+     * Set the value.
      */
     fun setValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String, value: Long) {
         StatCraft.getInstance().threadManager.scheduleUpdate(
@@ -317,21 +317,21 @@ class StatCraftQuery(
     // Get Value
     // ***************************
     /**
-     * TODO
+     * Get a completable future for which when completed will hold the value with no primary or secondary types.
      */
     fun getValue(player: UUID, world: UUID): CompletableFuture<Long> {
         return getValue(player, world, EMPTY_STRING)
     }
 
     /**
-     * TODO
+     * Get a completable future for which when completed will hold the value with no secondary type.
      */
     fun getValue(player: UUID, world: UUID, primaryTarget: String): CompletableFuture<Long> {
         return getValue(player, world, primaryTarget, EMPTY_STRING)
     }
 
     /**
-     * TODO
+     * Get a completable future for which when completed will hold the value.
      */
     fun getValue(player: UUID, world: UUID, primaryTarget: String, secondaryTarget: String): CompletableFuture<Long> {
         return StatCraft.getInstance().threadManager.scheduleQuery<Long>(
@@ -360,7 +360,7 @@ class StatCraftQuery(
     }
 
     /**
-     * TODO
+     * Get the sum of all values for this statistic for this player, ignoring both the primary and secondary types.
      */
     fun getSum(player: UUID, world: UUID): CompletableFuture<BigDecimal> {
         return StatCraft.getInstance().threadManager.scheduleQuery<BigDecimal>(
@@ -385,7 +385,7 @@ class StatCraftQuery(
     }
 
     /**
-     * TODO
+     * Get the sum of all values for this statistic for this player, ignoring the secondary type.
      */
     fun getSum(player: UUID, world: UUID, primaryTarget: String): CompletableFuture<BigDecimal> {
         return StatCraft.getInstance().threadManager.scheduleQuery<BigDecimal>(
@@ -410,5 +410,4 @@ class StatCraftQuery(
             primaryTarget
         )
     }
-
 }

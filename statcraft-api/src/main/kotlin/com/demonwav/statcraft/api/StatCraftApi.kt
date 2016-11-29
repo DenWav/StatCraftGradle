@@ -16,19 +16,19 @@ import java.util.ArrayList
 import java.util.UUID
 
 /**
- * TODO
+ * Class for plugin-specific API's.
  */
 class StatCraftApi(val plugin: Any) {
 
     private var namespaceString: String? = null
     /**
-     * TODO
+     * The namespace UUID for the plugin this [StatCraftApi] instance is connected to.
      */
     val namespace: UUID by lazy {
         UUID.fromString(namespaceString)
     }
     /**
-     * TODO
+     * The internal integer id for the plugin this [StatCraftApi] instance is connected to.
      */
     val id: Int by lazy {
         StatCraft.getInstance().databaseManager.getPluginId(namespace) ?:
@@ -36,7 +36,7 @@ class StatCraftApi(val plugin: Any) {
     }
 
     /**
-     * TODO
+     * The statistics defined by this [StatCraftApi] instance.
      */
     val stats = ArrayList<StatCraftStatistic>()
 
@@ -56,7 +56,7 @@ class StatCraftApi(val plugin: Any) {
     }
 
     /**
-     * TODO
+     * Register a new [StatCraftStatistic] with the plugin this [StatCraftApi] is connected to.
      */
     fun registerStatistic(stat: StatCraftStatistic) {
         stat.api = this
@@ -65,7 +65,7 @@ class StatCraftApi(val plugin: Any) {
 
     companion object {
         /**
-         * TODO
+         * Considered the "empty" [StatCraftStatisticType].
          */
         @JvmField
         val UNIT_TYPE = object : StatCraftStatisticType {
@@ -76,7 +76,7 @@ class StatCraftApi(val plugin: Any) {
         }
 
         /**
-         * TODO
+         * Considered an array of the "empty" [StatCraftStatisticType].
          */
         @JvmField
         val UNIT_TYPE_ARRAY = arrayOf(UNIT_TYPE)

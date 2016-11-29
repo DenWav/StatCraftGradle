@@ -10,7 +10,7 @@
 package com.demonwav.statcraft.api
 
 /**
- * TODO
+ * Defines a statistic tracked by StatCraft.
  */
 abstract class StatCraftStatistic {
 
@@ -29,15 +29,11 @@ abstract class StatCraftStatistic {
      */
     open val description: String = ""
     /**
-     * The StatCraftStatisticTypes which correspond with this StatCraftStatistic. Never null.
-     *
-     * If the idea of stat types does not apply to this particular statistic, then simply return [StatCraftApi.UNIT_TYPE_ARRAY]
+     * The StatCraftStatisticTypes which correspond with this StatCraftStatistic. Optional. Never null.
      */
     open val primaryStatTypes: Array<StatCraftStatisticType> = StatCraftApi.UNIT_TYPE_ARRAY
     /**
-     * The StatCraftStatisticTypes which correspond to as secondary types for this StatCraftStatistic. Never null.
-     *
-     * If the idea of a secondary stat type does not apply to this particular statistic, then simply return [StatCraftApi.UNIT_TYPE_ARRAY]
+     * The StatCraftStatisticTypes which correspond to as secondary types for this StatCraftStatistic. Optional. Never null.
      */
     open val secondaryStatTypes: Array<StatCraftStatisticType> = StatCraftApi.UNIT_TYPE_ARRAY
     /**
@@ -46,7 +42,7 @@ abstract class StatCraftStatistic {
     abstract val index: Int
 
     /**
-     * TODO
+     * Build a database query off of this statistic, to retrieve or update information.
      */
     fun query(): StatCraftQuery {
         return StatCraftQuery(this)

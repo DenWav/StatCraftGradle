@@ -32,6 +32,7 @@ abstract class AbstractThreadManager : ThreadManager {
     }
 
     override fun close() {
-        StatCraft.getInstance().taskChain.shutdown(20, TimeUnit.MILLISECONDS)
+        StatCraft.getInstance().taskChain.shutdown(50, TimeUnit.MILLISECONDS)
+        shutdown()
     }
 }

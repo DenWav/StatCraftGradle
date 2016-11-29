@@ -10,6 +10,6 @@
 package com.demonwav.statcraft.commands
 
 /**
- * TODO
+ * Exception thrown by [BaseCommand] when a StatCraft command is declared with the same name as a previously defined command.
  */
 class CommandAlreadyDefinedException(s: String) : RuntimeException("$s has already been defined.")
