@@ -18,14 +18,14 @@ class StatCraftPlugin : JavaPlugin() {
     }
 
     override fun onLoad() {
-        BukkitStatCraft.instance.preInit()
+        StatCraft.getInstance().preInit()
     }
 
     override fun onEnable() {
-        BukkitStatCraft.instance.postInit()
+        StatCraft.getInstance().postInit()
     }
 
     override fun onDisable() {
-        BukkitStatCraft.instance.shutdown()
+        StatCraft.getInstance().shutdown()
     }
 }

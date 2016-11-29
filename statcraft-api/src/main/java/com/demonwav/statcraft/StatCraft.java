@@ -88,7 +88,7 @@ public interface StatCraft {
     }
 
     /**
-     * Short-ahnd method for {@code getInstance().getTaskChain().newChain()}.
+     * Short-hand method for {@code getInstance().getTaskChain().newChain()}.
      *
      * @return a new task chain.
      */
@@ -113,6 +113,21 @@ public interface StatCraft {
      */
     @NotNull
     String getTimeZone();
+
+    /**
+     * Called during the earliest stage of plugin setup to prepare StatCraft to be set up by additional plugins.
+     */
+    void preInit();
+
+    /**
+     * Called during the normal stage of plugin setup to initialize the internal StatCraft plugin.
+     */
+    void postInit();
+
+    /**
+     * Called during platform plugin shutdown to cleanup and close everything.
+     */
+    void shutdown();
 
     /**
      * Retrieve the player name to UUID mapping loaded from the database. This means it contains player name to UUID

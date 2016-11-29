@@ -39,16 +39,16 @@ class StatCraftPlugin {
 
     @Listener
     fun onGamePreInitializationEvent(event: GamePreInitializationEvent) {
-        SpongeStatCraft.instance.preInit()
+        StatCraft.getInstance().preInit()
     }
 
     @Listener
     fun onGamePostInitializationEvent(event: GamePostInitializationEvent) {
-        SpongeStatCraft.instance.postInit()
+        StatCraft.getInstance().postInit()
     }
 
     @Listener
     fun onGameStoppingEvent(event: GameStoppingEvent) {
-        SpongeStatCraft.instance.shutdown()
+        StatCraft.getInstance().shutdown()
     }
 }

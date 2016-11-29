@@ -64,7 +64,7 @@ abstract class AbstractStatCraft : StatCraft {
     // StatCraft's API instance
     protected lateinit var api: StatCraftApi
 
-    fun preInit() {
+    override fun preInit() {
         val loader = HoconConfigurationLoader.builder().setPath(configFile).build()
         val configMapper = ObjectMapper.forClass(Config::class.java).bindToNew()
 
@@ -88,7 +88,7 @@ abstract class AbstractStatCraft : StatCraft {
         registerStats()
     }
 
-    fun postInit() {
+    override fun postInit() {
         databaseManager.setupDatabase()
         if (!isEnabled) {
             return
@@ -102,7 +102,7 @@ abstract class AbstractStatCraft : StatCraft {
         createCommands()
     }
 
-    fun shutdown() {
+    override fun shutdown() {
         threadManager.close()
         threadManager.shutdown()
     }
